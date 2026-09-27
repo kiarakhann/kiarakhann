@@ -1,0 +1,34 @@
+{
+  "original_user_entry": {
+    "date_of_birth": "25th of August 2005",
+    "time_of_birth": "6:29 a.m.",
+    "time_certainty": "The time is very accurate.",
+    "birthplace": "Udhampur, J and K, India. It was in a nursing home. It's a big nursing home in Udhampur.",
+    "gender": "male",
+    "current_residence": "Langley, Canada",
+    "calendar_note": "The date of birth is recorded in Indian calendar. No."
+  },
+  "normalized": {
+    "calendar": "gregorian",
+    "calendar_interpretation": "User answered 'No' to the non-Gregorian calendar question; date treated as Gregorian civil date.",
+    "local_date": "2005-08-25",
+    "local_time_24h": "06:29",
+    "time_precision": "minute",
+    "time_uncertainty_minutes": 1,
+    "time_uncertainty_rationale": "User reports the time as very accurate but recorded only to the minute; a +/-1 minute ensemble covers minute rounding/truncation.",
+    "place_name": "Udhampur, Jammu and Kashmir, India",
+    "place_detail": "Nursing home in Udhampur town (exact facility not named; town-centre coordinates used)",
+    "latitude": 32.916,
+    "longitude": 75.1416,
+    "elevation_m": 756,
+    "coordinate_source": "Udhampur town centre, standard gazetteer values (approx. +/-3 km for an unnamed in-town facility)",
+    "gender": "male",
+    "current_residence": {
+      "place_name": "Langley, British Columbia, Canada",
+      "latitude": 49.1044,
+      "longitude": -122.66,
+      "iana_zone": "America/Vancouver"
+    },
+    "iana_zone": "Asia/Kolkata"
+  }
+}

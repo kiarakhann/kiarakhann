@@ -1,0 +1,730 @@
+{
+  "thresholds": {
+    "planet_deg": 0.01,
+    "angle_deg": 0.05,
+    "solar_term_s": 120,
+    "sunrise_s": 60,
+    "node_deg": 0.01
+  },
+  "engines": {
+    "primary_astronomy": "Swiss Ephemeris 2.10.03 via pyswisseph 2.10.3.2 (sepl_18.se1, semo_18.se1)",
+    "validator_astronomy": "Skyfield 1.55 + JPL DE421 (skyfield-data package); DE440/DE441 not reachable (JPL host blocked by network policy)",
+    "chinese_calendar": "lunar_python 1.4.8; hand-coded sexagenary arithmetic as validator",
+    "ziwei": "iztro 2.6.1 (single method)",
+    "maya": "convertdate 2.5.1 + hand-coded arithmetic"
+  },
+  "rows": [
+    {
+      "system": "shared",
+      "datum": "Sun tropical apparent longitude",
+      "primary_engine": "Swiss Ephemeris 2.10.03 (sepl_18/semo_18)",
+      "primary_value": 151.93689721506632,
+      "validator": "Skyfield 1.55 + JPL DE421",
+      "validator_value": 151.93689073638575,
+      "difference": 6.478680575128237e-06,
+      "convention": "geocentric apparent, true equinox and ecliptic of date",
+      "boundary_distance": 1.936897215066324,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "shared",
+      "datum": "Moon tropical apparent longitude",
+      "primary_engine": "Swiss Ephemeris 2.10.03 (sepl_18/semo_18)",
+      "primary_value": 42.87935742958891,
+      "validator": "Skyfield 1.55 + JPL DE421",
+      "validator_value": 42.87926642996465,
+      "difference": 9.099962426262209e-05,
+      "convention": "geocentric apparent, true equinox and ecliptic of date",
+      "boundary_distance": 12.879357429588907,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "shared",
+      "datum": "Mercury tropical apparent longitude",
+      "primary_engine": "Swiss Ephemeris 2.10.03 (sepl_18/semo_18)",
+      "primary_value": 133.59843976524192,
+      "validator": "Skyfield 1.55 + JPL DE421",
+      "validator_value": 133.5984325625523,
+      "difference": 7.202689630503301e-06,
+      "convention": "geocentric apparent, true equinox and ecliptic of date",
+      "boundary_distance": 13.59843976524192,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "shared",
+      "datum": "Venus tropical apparent longitude",
+      "primary_engine": "Swiss Ephemeris 2.10.03 (sepl_18/semo_18)",
+      "primary_value": 189.3604411118077,
+      "validator": "Skyfield 1.55 + JPL DE421",
+      "validator_value": 189.36043306337552,
+      "difference": 8.048432164287078e-06,
+      "convention": "geocentric apparent, true equinox and ecliptic of date",
+      "boundary_distance": 9.360441111807688,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "shared",
+      "datum": "Mars tropical apparent longitude",
+      "primary_engine": "Swiss Ephemeris 2.10.03 (sepl_18/semo_18)",
+      "primary_value": 44.3182341489011,
+      "validator": "Skyfield 1.55 + JPL DE421",
+      "validator_value": 44.3182311364282,
+      "difference": 3.0124728880309704e-06,
+      "convention": "geocentric apparent, true equinox and ecliptic of date",
+      "boundary_distance": 14.318234148901098,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "shared",
+      "datum": "Jupiter tropical apparent longitude",
+      "primary_engine": "Swiss Ephemeris 2.10.03 (sepl_18/semo_18)",
+      "primary_value": 197.22324010120423,
+      "validator": "Skyfield 1.55 + JPL DE421",
+      "validator_value": 197.22323858065297,
+      "difference": 1.5205512511329289e-06,
+      "convention": "geocentric apparent, true equinox and ecliptic of date",
+      "boundary_distance": 12.776759898795774,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "shared",
+      "datum": "Saturn tropical apparent longitude",
+      "primary_engine": "Swiss Ephemeris 2.10.03 (sepl_18/semo_18)",
+      "primary_value": 125.00873170996528,
+      "validator": "Skyfield 1.55 + JPL DE421",
+      "validator_value": 125.00873087686186,
+      "difference": 8.33103399600077e-07,
+      "convention": "geocentric apparent, true equinox and ecliptic of date",
+      "boundary_distance": 5.008731709965275,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "jyotisha",
+      "datum": "Mean lunar node (Rahu) tropical longitude",
+      "primary_engine": "Swiss Ephemeris",
+      "primary_value": 15.824154758351554,
+      "validator": "Meeus (1998) ch.47 polynomial, hand-coded",
+      "validator_value": 15.825203965533719,
+      "difference": 0.0010492071821772697,
+      "convention": "mean node, equinox of date",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "jyotisha",
+      "datum": "True lunar node",
+      "primary_engine": "Swiss Ephemeris",
+      "primary_value": 14.45963036342244,
+      "validator": null,
+      "validator_value": null,
+      "difference": null,
+      "convention": "true (osculating) node; alternative track only",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "medium",
+      "status": "single-engine",
+      "note": "no independent true-node validator installed; same sign as mean node"
+    },
+    {
+      "system": "western",
+      "datum": "Ascendant tropical longitude",
+      "primary_engine": "Swiss Ephemeris houses_ex",
+      "primary_value": 157.34820901404478,
+      "validator": "spherical formula with Skyfield GAST + true obliquity (hand-coded)",
+      "validator_value": 157.3460843403853,
+      "difference": 0.002124673659494647,
+      "convention": "tropical, true obliquity, apparent sidereal time",
+      "boundary_distance": 7.348209014044784,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "western",
+      "datum": "MC tropical longitude",
+      "primary_engine": "Swiss Ephemeris houses_ex",
+      "primary_value": 65.21943622691063,
+      "validator": "spherical formula with Skyfield GAST + true obliquity (hand-coded)",
+      "validator_value": 65.2170458787062,
+      "difference": 0.0023903482044147495,
+      "convention": "tropical, true obliquity, apparent sidereal time",
+      "boundary_distance": 5.219436226910631,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "jyotisha",
+      "datum": "Lagna sidereal longitude (Lahiri)",
+      "primary_engine": "Swiss Ephemeris (FLG_SIDEREAL)",
+      "primary_value": 133.41328888316613,
+      "validator": "independent tropical Asc minus Swiss Lahiri ayanamsha",
+      "validator_value": 133.41010973098662,
+      "difference": 0.003179152179512812,
+      "convention": "sidereal Lahiri; ayanamsha value itself single-engine",
+      "boundary_distance": 13.413288883166132,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass",
+      "note": "ayanamsha is a convention; Lahiri value not independently re-derived"
+    },
+    {
+      "system": "jyotisha",
+      "datum": "D9 (Navamsa) Lagna",
+      "primary_engine": "builder formula",
+      "primary_value": "Leo",
+      "validator": null,
+      "validator_value": null,
+      "difference": null,
+      "convention": "D9 = floor(lon/3.333) mod 12",
+      "boundary_distance": {
+        "minutes_to_previous_change": 0.3786164249999957
+      },
+      "uncertainty_stability": "sensitive",
+      "confidence": "low",
+      "status": "pass",
+      "note": "changes to Cancer ~23 s before the recorded minute; treated as unavailable for interpretation"
+    },
+    {
+      "system": "jyotisha",
+      "datum": "D10 (Dasamsa) Lagna",
+      "primary_engine": "builder formula",
+      "primary_value": "Sagittarius",
+      "validator": null,
+      "validator_value": null,
+      "difference": null,
+      "convention": "odd sign from itself, even sign from 9th",
+      "boundary_distance": {
+        "minutes": [
+          6.7,
+          7.51
+        ]
+      },
+      "uncertainty_stability": "stable",
+      "confidence": "medium",
+      "status": "pass",
+      "note": "stable within +/-1 min but only ~7 min from each boundary"
+    },
+    {
+      "system": "shared",
+      "datum": "Sunrise at birthplace",
+      "primary_engine": "Swiss Ephemeris rise_trans (upper limb, refraction)",
+      "primary_value": "2005-08-25T05:59:13+05:30",
+      "validator": "Skyfield almanac.find_risings (DE421)",
+      "validator_value": "2005-08-25T05:59:10+05:30",
+      "difference": 2.212179,
+      "convention": "seconds; upper limb with standard refraction",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "western",
+      "datum": "Sun apparent altitude (sect)",
+      "primary_engine": "Swiss Ephemeris azalt",
+      "primary_value": 5.452355387539026,
+      "validator": "Skyfield altaz(standard refraction)",
+      "validator_value": 5.438422129090255,
+      "difference": 0.01393325844877058,
+      "convention": "degrees; day chart if > 0",
+      "boundary_distance": {
+        "minutes_after_sect_change": 28.5
+      },
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "bazi",
+      "datum": "立秋 solar term instant (Sun 135 deg)",
+      "primary_engine": "Swiss Ephemeris bisection",
+      "primary_value": "2005-08-07T10:03:21+00:00",
+      "validator": "Skyfield DE421 bisection; lunar_python table",
+      "validator_value": {
+        "skyfield": "2005-08-07T10:03:22+00:00",
+        "lunar_python": "2005-08-07T10:03:21+00:00"
+      },
+      "difference": 1.394585,
+      "convention": "apparent geocentric solar longitude",
+      "boundary_distance": {
+        "days": 17.621970447245985
+      },
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "bazi",
+      "datum": "白露 solar term instant (Sun 165 deg)",
+      "primary_engine": "Swiss Ephemeris bisection",
+      "primary_value": "2005-09-07T12:56:39+00:00",
+      "validator": "Skyfield DE421 bisection; lunar_python table",
+      "validator_value": {
+        "skyfield": "2005-09-07T12:56:40+00:00",
+        "lunar_python": "2005-09-07T12:56:40+00:00"
+      },
+      "difference": 1.421469,
+      "convention": "apparent geocentric solar longitude",
+      "boundary_distance": {
+        "days": 13.498377425130457
+      },
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "bazi",
+      "datum": "Birth after 立秋 and before 白露 (month pillar 申)",
+      "primary_engine": "Swiss Ephemeris",
+      "primary_value": true,
+      "validator": "invariant",
+      "validator_value": true,
+      "difference": null,
+      "convention": "exact sectional-term instants",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "bazi",
+      "datum": "Four Pillars (civil time)",
+      "primary_engine": "lunar_python 1.4.8",
+      "primary_value": "乙酉 甲申 辛巳 辛卯",
+      "validator": "hand-coded sexagenary arithmetic + Swiss solar longitude",
+      "validator_value": "乙酉 甲申 辛巳 辛卯",
+      "difference": 0,
+      "convention": "Li Chun year, jie months, 00:00 day boundary",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "bazi",
+      "datum": "Four Pillars (local apparent solar time track)",
+      "primary_engine": "hand-coded",
+      "primary_value": "乙酉 甲申 辛巳 辛卯",
+      "validator": null,
+      "validator_value": null,
+      "difference": null,
+      "convention": "LAT 05:57:24",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass",
+      "note": "identical to civil track; no school disagreement on pillars"
+    },
+    {
+      "system": "bazi",
+      "datum": "Hidden stems",
+      "primary_engine": "builder table",
+      "primary_value": [
+        [
+          "辛"
+        ],
+        [
+          "庚",
+          "壬",
+          "戊"
+        ],
+        [
+          "丙",
+          "庚",
+          "戊"
+        ],
+        [
+          "乙"
+        ]
+      ],
+      "validator": "lunar_python table",
+      "validator_value": [
+        [
+          "辛"
+        ],
+        [
+          "庚",
+          "壬",
+          "戊"
+        ],
+        [
+          "丙",
+          "庚",
+          "戊"
+        ],
+        [
+          "乙"
+        ]
+      ],
+      "difference": 0,
+      "convention": "standard 藏干",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "bazi",
+      "datum": "Day Master strength",
+      "primary_engine": "rule DMS-1",
+      "primary_value": "strong",
+      "validator": null,
+      "validator_value": null,
+      "difference": null,
+      "convention": "documented weighting rule",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "medium",
+      "status": "pass",
+      "note": "school-dependent rule; single implementation"
+    },
+    {
+      "system": "bazi",
+      "datum": "Useful God / favorable element",
+      "primary_engine": "Fu-Yi + Tiao-Hou",
+      "primary_value": [
+        "water"
+      ],
+      "validator": null,
+      "validator_value": null,
+      "difference": null,
+      "convention": "two named schools",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "medium",
+      "status": "pass",
+      "note": "schools agree only on water"
+    },
+    {
+      "system": "bazi",
+      "datum": "Da Yun start",
+      "primary_engine": "UTC jie interval x 365.2425/3",
+      "primary_value": "2011-07-10T16:49:25+05:30",
+      "validator": "lunar_python sect1/sect2 (Beijing-time input)",
+      "validator_value": {
+        "input": "birth converted to Beijing time 2005-08-25 08:59",
+        "sect1_start": "2011-07-05 08:59:00",
+        "sect2_start": "2011-07-10 00:59:00",
+        "sect1_first_pillar": "癸未",
+        "note": "different day-count conventions; spread is school-dependent"
+      },
+      "difference": "~0-5 days",
+      "convention": "school-dependent day-count convention",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "medium",
+      "status": "pass",
+      "note": "conventions spread 2011-07-05 .. 2011-07-10; all Da Yun boundaries inherit this spread"
+    },
+    {
+      "system": "jyotisha",
+      "datum": "Vimshottari full cycle = 120 years",
+      "primary_engine": "builder",
+      "primary_value": 120,
+      "validator": "invariant",
+      "validator_value": 120,
+      "difference": 0,
+      "convention": "",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "jyotisha",
+      "datum": "Vimshottari balance at birth (Venus, years)",
+      "primary_engine": "Swiss Moon",
+      "primary_value": 11.583344051934608,
+      "validator": "Skyfield Moon - Lahiri",
+      "validator_value": 11.585062269151027,
+      "difference": 0.6275788382971874,
+      "convention": "difference in days",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass",
+      "note": "+/-1 clock minute shifts all dasha boundaries by ~5 days"
+    },
+    {
+      "system": "jyotisha",
+      "datum": "Rahu-Ketu separation",
+      "primary_engine": "builder",
+      "primary_value": 179.99999999999994,
+      "validator": "invariant",
+      "validator_value": 180.0,
+      "difference": 5.684341886080802e-14,
+      "convention": "mean node",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "jyotisha",
+      "datum": "Vimshottari MD/AD continuity",
+      "primary_engine": "builder",
+      "primary_value": true,
+      "validator": "invariant",
+      "validator_value": true,
+      "difference": null,
+      "convention": "",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "bazi",
+      "datum": "Da Yun continuity",
+      "primary_engine": "builder",
+      "primary_value": true,
+      "validator": "invariant",
+      "validator_value": true,
+      "difference": null,
+      "convention": "",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "ziwei",
+      "datum": "Decadal period continuity",
+      "primary_engine": "iztro + CNY conversion",
+      "primary_value": true,
+      "validator": "invariant",
+      "validator_value": true,
+      "difference": null,
+      "convention": "nominal age",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "western",
+      "datum": "Profection continuity",
+      "primary_engine": "builder",
+      "primary_value": true,
+      "validator": "invariant",
+      "validator_value": true,
+      "difference": null,
+      "convention": "",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "ziwei",
+      "datum": "12 unique palaces and branches",
+      "primary_engine": "iztro 2.6.1",
+      "primary_value": [
+        12,
+        12
+      ],
+      "validator": "invariant",
+      "validator_value": [
+        12,
+        12
+      ],
+      "difference": null,
+      "convention": "",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "ziwei",
+      "datum": "14 major stars each placed once",
+      "primary_engine": "iztro",
+      "primary_value": 14,
+      "validator": "invariant",
+      "validator_value": 14,
+      "difference": null,
+      "convention": "",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "ziwei",
+      "datum": "紫微/天府 mirror across 寅-申 axis",
+      "primary_engine": "iztro",
+      "primary_value": "辰/子",
+      "validator": "invariant (i+j) mod 12 = 4",
+      "validator_value": true,
+      "difference": null,
+      "convention": "",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "ziwei",
+      "datum": "Ming (命) palace branch",
+      "primary_engine": "iztro",
+      "primary_value": "巳",
+      "validator": "hand formula 寅+(month-1)-hour",
+      "validator_value": "巳",
+      "difference": null,
+      "convention": "",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "ziwei",
+      "datum": "Shen (身) palace branch",
+      "primary_engine": "iztro",
+      "primary_value": "亥",
+      "validator": "hand formula 寅+(month-1)+hour",
+      "validator_value": "亥",
+      "difference": null,
+      "convention": "",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "ziwei",
+      "datum": "Five Elements Bureau",
+      "primary_engine": "iztro",
+      "primary_value": "金四局",
+      "validator": "五虎遁 + lunar_python Na Yin table",
+      "validator_value": "辛巳 白蜡金 -> 金四局",
+      "difference": null,
+      "convention": "",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "ziwei",
+      "datum": "Lunar date and pillars match lunar_python",
+      "primary_engine": "iztro",
+      "primary_value": "7/21 乙酉 甲申 辛巳 辛卯",
+      "validator": "lunar_python",
+      "validator_value": "7/21",
+      "difference": null,
+      "convention": "Beijing reference lunar calendar",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "ziwei",
+      "datum": "Four Transformations (birth-year stem 乙)",
+      "primary_engine": "iztro",
+      "primary_value": {
+        "天机": "禄",
+        "紫微": "科",
+        "天梁": "权",
+        "太阴": "忌"
+      },
+      "validator": "standard 乙年 table (机梁紫阴)",
+      "validator_value": {
+        "天机": "禄",
+        "天梁": "权",
+        "紫微": "科",
+        "太阴": "忌"
+      },
+      "difference": null,
+      "convention": "",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "ziwei",
+      "datum": "Independence disclosure",
+      "primary_engine": "iztro (JavaScript)",
+      "primary_value": "single method",
+      "validator": null,
+      "validator_value": null,
+      "difference": null,
+      "convention": "py-iztro not used; would wrap the same method",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "medium",
+      "status": "single-engine"
+    },
+    {
+      "system": "maya",
+      "datum": "Long Count / Tzolk'in / Haab' (GMT 584283)",
+      "primary_engine": "convertdate 2.5.1",
+      "primary_value": "12.19.12.10.5 7 Chikchan 3 Mol",
+      "validator": "hand-coded JDN arithmetic",
+      "validator_value": "12.19.12.10.5 7 Chikchan 3 Mol",
+      "difference": null,
+      "convention": "GMT 584283",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "high",
+      "status": "pass"
+    },
+    {
+      "system": "tibetan",
+      "datum": "Element-animal year",
+      "primary_engine": "builder (Losar-window argument)",
+      "primary_value": "Wood Bird (female)",
+      "validator": null,
+      "validator_value": null,
+      "difference": null,
+      "convention": "Phugpa/Tsurphu both place Losar Jan-Mar",
+      "boundary_distance": null,
+      "uncertainty_stability": "stable",
+      "confidence": "medium",
+      "status": "pass",
+      "note": "no lineage calendar engine; year label only"
+    }
+  ],
+  "summary": {
+    "total": 43,
+    "pass": 41,
+    "alert": 0,
+    "fail": 0,
+    "single_engine": 2,
+    "largest_differences": {
+      "degrees": {
+        "datum": "Sun apparent altitude (sect)",
+        "difference": 0.01393325844877058
+      },
+      "seconds": {
+        "datum": "Sunrise at birthplace",
+        "difference": 2.212179
+      },
+      "days": {
+        "datum": "Vimshottari balance at birth (Venus, years)",
+        "difference": 0.6275788382971874
+      }
+    },
+    "invariant_failures": [],
+    "systems_halted": []
+  }
+}

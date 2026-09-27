@@ -1,0 +1,151 @@
+{
+  "execution_timestamp_utc": "2026-09-27T01:44:56+00:00",
+  "runtime": {
+    "python": "3.12.3",
+    "node": "v22.22.2",
+    "platform": "Linux-6.18.44-fc-v37-x86_64-with-glibc2.39"
+  },
+  "python_packages": [
+    "certifi==2026.7.22",
+    "cffi==2.1.1",
+    "convertdate==2.5.1",
+    "flatbuffers==25.12.19",
+    "h3==4.5.0",
+    "jplephem==2.24",
+    "lunar-python==1.4.8",
+    "numpy==2.5.3",
+    "pycparser==3.0",
+    "pymeeus==0.5.12",
+    "pyswisseph==2.10.3.2",
+    "sgp4==2.27",
+    "skyfield==1.55",
+    "skyfield-data==7.0.0",
+    "timezonefinder==9.0.0",
+    "timezonefinder-data==3.2026.4",
+    "tzdata==2026.4"
+  ],
+  "node_packages": {
+    "iztro": "2.6.1"
+  },
+  "ephemerides": {
+    "ephe/sepl_18.se1": {
+      "source": "github.com/aloistr/swisseph ephe/",
+      "sha256": "ca1393ceab3a44fbc895887cf789c68819ae6a1cbc9b22225872dbe4ccd99a66"
+    },
+    "ephe/semo_18.se1": {
+      "source": "github.com/aloistr/swisseph ephe/",
+      "sha256": "1ca07bd67c24374d77226180c20a4f9996cba013697894810518e7eb582ca4f7"
+    },
+    "de421.bsp": {
+      "source": "skyfield-data PyPI package (JPL DE421)",
+      "sha256": "a20a7139da04cbc462454634918e9a9ca69127044e2cc9d4f9c16e238d2deedc",
+      "note": "DE440/DE441 unavailable: naif.jpl.nasa.gov and ssd.jpl.nasa.gov returned HTTP 403 through the environment network policy"
+    }
+  },
+  "iana_tzdata": {
+    "python_tzdata_package": "2026.4",
+    "header": "# version 2026d"
+  },
+  "conventions": {
+    "shared": {
+      "positions": "geocentric apparent (light-time, aberration, nutation), true equinox of date",
+      "time_scale": "UT1 input; TT via Swiss Ephemeris delta-T",
+      "civil_time": "IANA tz database via zoneinfo + tzdata package",
+      "sunrise_sunset": "upper limb, standard atmospheric refraction, Swiss Ephemeris rise_trans",
+      "local_mean_time": "UTC + longitude/15 h",
+      "local_apparent_time": "LMT + equation of time (Swiss Ephemeris time_equ)"
+    },
+    "jyotisha": {
+      "zodiac": "sidereal",
+      "ayanamsha": "Lahiri (Swiss Ephemeris SIDM_LAHIRI)",
+      "houses": "whole-sign from sidereal Lagna (Parashari primary track)",
+      "node": "mean node primary; true node reported as alternative",
+      "grahas": "Sun..Saturn + Rahu/Ketu",
+      "aspects": "graha drishti: all 7th; Mars +4th,+8th; Jupiter +5th,+9th; Saturn +3rd,+10th; nodes excluded",
+      "combustion_orbs_deg": {
+        "Moon": 12,
+        "Mars": 17,
+        "Mercury": 14,
+        "Mercury_retro": 12,
+        "Jupiter": 11,
+        "Venus": 10,
+        "Venus_retro": 8,
+        "Saturn": 15
+      },
+      "planetary_war": "Mars/Mercury/Jupiter/Venus/Saturn within 1 deg of longitude",
+      "dignity": "exaltation/debilitation sign, moolatrikona ranges, own sign, else compound (panchadha) relationship with sign lord (BPHS natural + temporal)",
+      "functional_nature": "rule set FN-1: trikona lords (1,5,9) benefic; lords of 3,6,11 malefic unless also trikona lord; natural benefic owning kendra only -> neutral (kendradhipati); 8th lord malefic unless also Lagna lord; 2nd/12th lords take nature of their other house; Moon/Sun owning only 2 or 12 -> neutral; lord of both kendra and trikona -> yogakaraka",
+      "divisional": "D9 navamsa: floor(lon/(10/3)) mod 12; D10 dasamsa: odd sign counts from itself, even sign from 9th",
+      "vimshottari_year_days": 365.25,
+      "vimshottari_levels": "Mahadasha, Antardasha (all), Pratyantardasha (current Antardasha only)",
+      "yoga_whitelist": [
+        "Gajakesari",
+        "Budha-Aditya",
+        "Chandra-Mangala",
+        "Pancha-Mahapurusha",
+        "Kemadruma(+cancellation)",
+        "Kendra-Trikona Raja",
+        "Yogakaraka",
+        "Neecha-Bhanga(rule NB-1)",
+        "Parivartana"
+      ]
+    },
+    "western": {
+      "zodiac": "tropical",
+      "houses": "whole-sign",
+      "planets": "7 traditional",
+      "sect": "day if apparent altitude of Sun centre > 0 at birthplace",
+      "triplicity": "Dorothean (day, night, participating)",
+      "bounds": "Egyptian",
+      "faces": "Chaldean decans",
+      "aspects": "Ptolemaic by whole sign; degree orb reported; 'close' if within 3 deg; applying/separating from relative speed",
+      "lots": "Fortune day=Asc+Moon-Sun, night=Asc+Sun-Moon; Spirit is the reverse",
+      "under_beams_deg": 15,
+      "combust_deg": 8.5,
+      "cazimi_deg": 0.2833,
+      "profection": "annual, age 0 = 1st house, Gregorian birthday to birthday",
+      "solar_return": "exact return of natal tropical Sun longitude; computed for birthplace and current residence"
+    },
+    "bazi": {
+      "calendar": "sexagenary; year from Li Chun (Sun 315 deg); month from sectional terms (jie)",
+      "primary_time": "local civil time (IST); local apparent solar time retained as alternative track",
+      "day_boundary": "local midnight (00:00); late-Zi (23:00-24:00) handled as same-day under sect 2 rule; not applicable here",
+      "da_yun_direction": "yang-year male / yin-year female forward, otherwise backward",
+      "da_yun_start": "interval to adjacent jie (UTC, astronomical) x (365.2425/3) days; periods of 10 Gregorian years",
+      "strength_rule": "DMS-1 (see bazi.day_master_strength.rule)",
+      "useful_god_schools": [
+        "Fu-Yi (support/suppress balance)",
+        "Tiao-Hou (seasonal regulation, Qiong Tong Bao Jian table)"
+      ]
+    },
+    "ziwei": {
+      "implementation": "iztro (JavaScript) via node",
+      "method": "astro.bySolar(date, timeIndex, gender, fixLeap=true)",
+      "time_index": "0=early Zi 00-01, 1=Chou 01-03, 2=Yin 03-05, 3=Mao 05-07, ... from local civil clock",
+      "lunar_calendar": "iztro/lunar-lite Chinese lunar calendar (Beijing reference)",
+      "leap_month": "fixLeap=true (second half of a leap month counted as next month)",
+      "age": "nominal age (xu sui): 1 at birth, +1 at each Chinese New Year",
+      "minor_star_set": "iztro default minorStars (14) ; adjective stars excluded from evidence"
+    },
+    "maya": {
+      "correlation": "GMT 584283 (convertdate EPOCH 584282.5 JD at midnight)"
+    },
+    "tibetan": {
+      "scope": "element-animal-gender year and rabjung cycle position only; Mewa, Parkha, la/sok/wangthang/lungta omitted (no validated lineage implementation)"
+    }
+  },
+  "source_sha256": {
+    "chart/builder.py": "74034d2b610725f36ff66fb120a3aa79c6a4d4b379c5e782561c66eac6158d3e",
+    "chart/common.py": "f12e64727d463a935a7a70859dffcba4888d1f0f649258c3bf8c8b94e86fae3e",
+    "chart/report.py": "44aafe84a05a0463848390737b5bae8b10e073b04a58fbed8cf2b69d60607bb6",
+    "chart/synthesize.py": "6725284761931b2861d4f51b617045bb5cd27c76e3c6c59ed1ec793ee5fcee0b",
+    "chart/verify.py": "fd7bc4227e12f0e9a50bd0582efa5334f9945652e9cfe2555e87ae076dc3ee3e",
+    "ziwei/run.js": "2ea9e42ad42803505d055266b6744774377192b0a89b0c944df9f724f2141a20",
+    "ziwei/package-lock.json": "e2217fc8673b70d683a31e278c31b5b74de01c6fa28b723bcfcb8b1c89ad1bfe"
+  },
+  "deviations_from_preferred_setup": [
+    "JPL validator kernel is DE421 (1900-2050) rather than DE440/DE441; adequate for a 2005 birth.",
+    "py-iztro not installed: it wraps the same iztro method and would add no independence.",
+    "immanuel not used: Western facts computed directly with pyswisseph under explicitly declared conventions."
+  ]
+}
