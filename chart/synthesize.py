@@ -5,13 +5,14 @@ import datetime as dt
 import json
 import os
 
-from common import ROOT, SIGN_RULER, SIGNS, dump
+from common import ROOT, DATA, SIGN_RULER, SIGNS, dump
 
-m = json.load(open(os.path.join(ROOT, "MASTER_DATASET.json")))
-ver = json.load(open(os.path.join(ROOT, "VERIFICATION_REPORT.json")))
+m = json.load(open(os.path.join(DATA, "MASTER_DATASET.json")))
+ver = json.load(open(os.path.join(DATA, "VERIFICATION_REPORT.json")))
 if ver["summary"]["systems_halted"]:
     raise SystemExit(f"invariant failure; halted systems: {ver['summary']['systems_halted']}")
 
+GENDER = m["input"]["normalized"]["gender"]
 DOMAINS = {"D1": "Self/identity", "D2": "Career/status", "D3": "Wealth/gains", "D4": "Partnership",
            "D5": "Family/roots/home", "D6": "Children/creation", "D7": "Health/routine",
            "D8": "Mind/education/craft", "D9": "Fortune/spirituality/worldview"}
@@ -24,9 +25,13 @@ REGISTRY = {
     "MAP-ZW": {"description": "Zi Wei palace -> domain",
                "map": {"D1": ["命宫"], "D2": ["官禄"], "D3": ["财帛"], "D4": ["夫妻"], "D5": ["田宅", "父母", "兄弟"],
                        "D6": ["子女"], "D7": ["疾厄"], "D9": ["福德"]}, "unmapped": ["迁移", "仆役"]},
-    "MAP-TG": {"description": "BaZi ten god -> domain (male chart conventions)",
+    "MAP-TG": {"description": "BaZi ten god -> domain; spouse and children stars follow the chart's gender convention "
+                              "(male: wealth = spouse, officer = children; female: officer = spouse, output = children)",
+               "gender": GENDER,
                "map": {"比肩": ["D1"], "劫财": ["D1"], "食神": ["D8", "D6"], "伤官": ["D8", "D6"],
-                       "偏财": ["D3"], "正财": ["D3", "D4"], "七杀": ["D2", "D6"], "正官": ["D2", "D6"],
+                       "偏财": ["D3"], "正财": ["D3", "D4"] if GENDER == "male" else ["D3"],
+                       "七杀": ["D2", "D6"] if GENDER == "male" else ["D2", "D4"],
+                       "正官": ["D2", "D6"] if GENDER == "male" else ["D2", "D4"],
                        "偏印": ["D8", "D5"], "正印": ["D8", "D5"]},
                "positional": {"year": ["D5"], "month": ["D5"], "day_branch": ["D4"], "hour": ["D6"]}},
     "J-DOM-1": "Jyotisha per house: P = 2*occupants(9 grahas) + [lord in 1/4/5/7/9/10] + [lord exalted/moolatrikona/own]; "
@@ -42,12 +47,15 @@ REGISTRY = {
                "net = major brightness (庙/旺 +1, 得/利/平 0, 不/陷 -1) + 禄/权/科 +1, 忌 -1 + auspicious +1 - malefic 1. "
                "Empty palace borrows opposite palace major stars for net only (借星). Multi-palace domain: P = max, net = mean.",
     "B-DOM-1": "BaZi: P = weighted ten-god occurrences mapped by MAP-TG (visible stem 1.0, hidden main 1.0, middle 0.5, residual 0.3) + positional pillar 0.5; "
-               "net = sum over those occurrences of element favourability (Fu-Yi favourable +1, unfavourable -1, water +0.5 extra as the only cross-school element) "
+               "net = sum over those occurrences of element favourability (Fu-Yi favourable +1, unfavourable -1, +0.5 extra for an element both Fu-Yi and Tiao-Hou favour) "
                "scaled by weight, + interactions on positional pillars (clash -1, destruction/punishment -0.5, combination +0.5). "
                "Bands P: high >= 2.0, medium 1.0-1.99, low < 1.0; polarity threshold +/-1.",
     "BANDS": "J/W/Z prominence: high P>=4, medium 2-3, low <=1. Polarity (J/W/Z): supportive net>=2, challenging net<=-2, else mixed.",
     "SINIC-COMBINE": "BaZi and Zi Wei form one vote: if only one speaks, use it; else prominence = lower band if they differ by one, "
                      "'medium' if they differ by two; polarity = shared value if equal, else 'mixed'. Internal agreement recorded.",
+    "SINIC-HOUR": "When the hour branch is sensitive, SINIC-COMBINE is evaluated for every hour alternative; the Sinic cluster "
+                  "speaks on a domain, temperament axis or timing activation only if all alternatives give the same result. "
+                  "Otherwise it is recorded as 'sensitive' and does not vote.",
     "AGREE": "Two cluster themes agree iff prominence band equal AND polarity equal. They conflict iff prominence differs by two bands "
              "OR one is supportive and the other challenging. Otherwise neither.",
     "GRADE": "DIVERGENT if any pair conflicts; else STRONG if all three speak and all pairs agree; else MODERATE if any pair agrees; "
@@ -166,8 +174,7 @@ def western_domains():
 # ------------------------------------------------------------ Sinic projections
 
 
-def ziwei_domains():
-    z = m["ziwei"]
+def ziwei_domains(z):
     by_name = {p["name"]: p for p in z["palaces"]}
     by_branch = {p["earthly_branch"]: p for p in z["palaces"]}
     BR = "子丑寅卯辰巳午未申酉戌亥"
@@ -205,8 +212,7 @@ def ziwei_domains():
     return out
 
 
-def bazi_domains():
-    b = m["bazi"]
+def bazi_domains(b):
     fav = set(b["useful_god"]["fu_yi"]["favorable"])
     unf = set(b["useful_god"]["fu_yi"]["unfavorable"])
     agree = set(b["useful_god"]["schools_agree_on"])
@@ -255,8 +261,11 @@ def bazi_domains():
     return out
 
 
-def sinic_domains():
-    zw, bz = ziwei_domains(), bazi_domains()
+HOUR_ALTS = {hp: a for hp, a in m["sinic_hour_alternatives"]["alternatives"].items() if a["bazi"] and a["ziwei"]}
+
+
+def sinic_domains_for(b, z):
+    zw, bz = ziwei_domains(z), bazi_domains(b)
     out = {}
     for d in DOMAINS:
         a, b = zw.get(d), bz.get(d)
@@ -274,6 +283,24 @@ def sinic_domains():
                   "confidence": "medium", "basis": {"ziwei": a, "bazi": b}, "internal_agreement": internal,
                   "mapping_rule": "MAP-ZW + Z-DOM-1; MAP-TG + B-DOM-1; SINIC-COMBINE"}
     return out
+
+
+def sinic_domains():
+    per = {hp: sinic_domains_for(a["bazi"], a["ziwei"]) for hp, a in HOUR_ALTS.items()}
+    out, sensitive = {}, {}
+    for d in DOMAINS:
+        th = {hp: (None if d not in x else (x[d]["prominence"], x[d]["polarity"])) for hp, x in per.items()}
+        if len(set(th.values())) == 1:
+            if d in next(iter(per.values())):
+                rep = next(iter(per.values()))[d]
+                rep["hour_alternatives"] = {hp: x[d]["basis"] for hp, x in per.items()} if len(per) > 1 else None
+                rep["mapping_rule"] += "; SINIC-HOUR" if len(per) > 1 else ""
+                out[d] = rep
+        else:
+            sensitive[d] = {hp: (None if t is None else {"prominence": t[0], "polarity": t[1], "basis": per[hp][d]["basis"],
+                                                          "internal_agreement": per[hp][d]["internal_agreement"]})
+                            for hp, t in th.items()}
+    return out, sensitive
 
 # ------------------------------------------------------------ grading
 
@@ -306,7 +333,8 @@ def grade(ths):
     return g, agr, conf
 
 
-J, W, S = jyotisha_domains(), western_domains(), sinic_domains()
+J, W = jyotisha_domains(), western_domains()
+S, S_SENSITIVE = sinic_domains()
 domains = {}
 for d in DOMAINS:
     th = {"jyotisha": J.get(d), "western": W.get(d), "sinic": S.get(d)}
@@ -316,6 +344,8 @@ for d in DOMAINS:
         a0 = th[agr[0][0]]
         shared = {"prominence": a0["prominence"], "polarity": a0["polarity"]}
     domains[d] = {"name": DOMAINS[d], "grade": g, "agreeing_pairs": agr, "conflicting_pairs": conf,
+                  "sinic_hour_sensitive": {hp: (None if t is None else {"prominence": t["prominence"], "polarity": t["polarity"]})
+                                           for hp, t in S_SENSITIVE[d].items()} if d in S_SENSITIVE else None,
                   "shared_theme": shared,
                   "themes": {k: (None if v is None else {"prominence": v["prominence"], "polarity": v["polarity"]}) for k, v in th.items()},
                   "note": "WEAK: clusters speak but neither agree nor conflict" if g == "WEAK" and sum(1 for v in th.values() if v) > 1 else None}
@@ -372,30 +402,43 @@ def w_planet_score(p):
     return s, why
 
 
-z = m["ziwei"]
-ming = next(p for p in z["palaces"] if p["name"] == "命宫")
+def sinic_axis_score(stars, ax, b, z):
+    ming = next(p for p in z["palaces"] if p["name"] == "命宫")
+    ssc, swhy = 0, []
+    for s_ in ming["major_stars"]:
+        if s_["name"] in stars:
+            v = -1 if s_["brightness"] in ("陷", "不") else 1
+            ssc += v; swhy.append(f"命宫 {s_['name']}({s_['brightness']}) {v:+}")
+    for role, star in (("life ruler", z["life_ruler"]), ("body ruler", z["body_ruler"])):
+        if star in stars:
+            ssc += 1; swhy.append(f"{role} {star} +1")
+    if ax == "T2" and b["day_master_strength"]["verdict"] == "strong":
+        ssc += 1; swhy.append("BaZi Day Master strong +1")
+    return ssc, swhy
+
+
 temper = {}
 for ax, (name, planets, stars) in AX.items():
     js = [jy_planet_score(p) for p in planets]
     ws = [w_planet_score(p) for p in planets]
     jsc, jwhy = max(x[0] for x in js), [w for x in js for w in x[1]]
     wsc, wwhy = max(x[0] for x in ws), [w for x in ws for w in x[1]]
-    ssc, swhy = 0, []
-    for s in ming["major_stars"]:
-        if s["name"] in stars:
-            v = -1 if s["brightness"] in ("陷", "不") else 1
-            ssc += v; swhy.append(f"命宫 {s['name']}({s['brightness']}) {v:+}")
-    for role, star in (("life ruler", z["life_ruler"]), ("body ruler", z["body_ruler"])):
-        if star in stars:
-            ssc += 1; swhy.append(f"{role} {star} +1")
-    if ax == "T2" and m["bazi"]["day_master_strength"]["verdict"] == "strong":
-        ssc += 1; swhy.append("BaZi Day Master strong +1")
 
     def st(x):
         return "supported" if x >= 2 else ("counter" if x <= -1 else "not emphasized")
+    alts = {hp: sinic_axis_score(stars, ax, a["bazi"], a["ziwei"]) for hp, a in HOUR_ALTS.items()}
+    statuses = {st(x[0]) for x in alts.values()}
+    if len(statuses) == 1:
+        ssc, swhy = next(iter(alts.values()))
+        sv = {"score": ssc, "status": st(ssc), "basis": swhy}
+        if len(alts) > 1:
+            sv["hour_alternatives"] = {hp: {"score": x[0], "basis": x[1]} for hp, x in alts.items()}
+    else:
+        sv = {"score": None, "status": "sensitive", "basis": [],
+              "hour_alternatives": {hp: {"score": x[0], "status": st(x[0]), "basis": x[1]} for hp, x in alts.items()}}
     votes = {"jyotisha": {"score": jsc, "status": st(jsc), "basis": jwhy},
              "western": {"score": wsc, "status": st(wsc), "basis": wwhy},
-             "sinic": {"score": ssc, "status": st(ssc), "basis": swhy}}
+             "sinic": sv}
     sup = [k for k, v in votes.items() if v["status"] == "supported"]
     ctr = [k for k, v in votes.items() if v["status"] == "counter"]
     temper[ax] = {"name": name, "votes": votes, "supported_by": sup, "countered_by": ctr,
@@ -429,7 +472,9 @@ for p in m["western"]["profections"]:
     ds = {H2D.get(p["house"]), H2D.get(p["ruler_natal_house"])} - {None}
     w_periods.append((parse(p["start"]), parse(p["end"]), ds, f"profection H{p['house']} {p['sign']} ({p['year_ruler']} in natal H{p['ruler_natal_house']})"))
 dy = [(parse(p["start"]), parse(p["end"]), set(TG_TIME[p["stem_ten_god"]]) | set(TG_TIME[p["branch_main_ten_god"]]), f"Da Yun {p['pillar']} ({p['stem_ten_god']}/{p['branch_main_ten_god']})") for p in m["bazi"]["da_yun"]["periods"]]
-zwd = [(parse(p["decadal_start"]), parse(p["decadal_end"]), {ZW2D[p["name"]]} if p["name"] in ZW2D else set(), f"Zi Wei decadal {p['name']} {p['earthly_branch']}") for p in m["ziwei"]["palaces"]]
+zwd_alts = {hp: [(parse(p["decadal_start"]), parse(p["decadal_end"]), {ZW2D[p["name"]]} if p["name"] in ZW2D else set(),
+                   f"Zi Wei decadal {p['name']} {p['earthly_branch']}" + (f" [{hp} hour]" if len(HOUR_ALTS) > 1 else ""))
+                  for p in a["ziwei"]["palaces"]] for hp, a in HOUR_ALTS.items()}
 
 
 def active(periods, day):
@@ -446,10 +491,14 @@ days_with_mod = days_with_strong = total_days = 0
 while day < horizon:
     jd_ = active(jy_periods, day)
     wd_ = active(w_periods, day)
-    sd_ = active(dy, day) + active(zwd, day)
+    dy_ = active(dy, day)
+    zw_by_alt = {hp: active(ps, day) for hp, ps in zwd_alts.items()}
+    # SINIC-HOUR: a Zi Wei decadal activation counts only if every hour alternative gives it
+    zw_dom = set.intersection(*[set().union(*[p[2] for p in v]) if v else set() for v in zw_by_alt.values()])
+    sd_ = dy_ + [p for v in zw_by_alt.values() for p in v]
     act = {"jyotisha": set().union(*[p[2] for p in jd_]) if jd_ else set(),
            "western": set().union(*[p[2] for p in wd_]) if wd_ else set(),
-           "sinic": set().union(*[p[2] for p in sd_]) if sd_ else set()}
+           "sinic": (set().union(*[p[2] for p in dy_]) if dy_ else set()) | zw_dom}
     conv = {}
     for d in DOMAINS:
         cl = tuple(k for k in act if d in act[k])
@@ -493,7 +542,9 @@ for c in candidates:
         continue
     seen.add(key)
     kept.append(c)
-removed["low_confidence"] += 1  # D9 Navamsa Lagna: boundary-sensitive, excluded from interpretation
+sens = [k for k, x in m["uncertainty_ensemble"]["stability"].items() if x["classification"] == "sensitive"]
+removed["low_confidence"] += len(sens)  # boundary-sensitive facts excluded from interpretation
+removed["sinic_hour_sensitive_domain_themes"] = len(S_SENSITIVE)
 
 syn = {
     "schema": "six-culture-verified-chart/synthesis/v2",
@@ -512,7 +563,7 @@ syn = {
                    "timeline": timeline,
                    "date_precision": {"vimshottari": "+/-5 days per clock minute; Moon-based", "da_yun": "convention spread ~5 days",
                                       "ziwei_decadal": "Chinese New Year boundaries", "profection": "birthday boundaries"}},
-    "claims_audit": {"candidates": len(candidates) + len(generic) + 1, "kept": len(kept), "removed": removed, "generic_dropped": generic},
+    "claims_audit": {"candidates": len(candidates) + len(generic) + len(sens) + len(S_SENSITIVE), "sensitive_facts_excluded": sens, "kept": len(kept), "removed": removed, "generic_dropped": generic},
     "symbolic_overlays": {"maya": {"calendar_round": m["maya"]["calendar_round_independent"], "long_count": m["maya"]["long_count"],
                                    "meaning": None, "votes": 0},
                           "tibetan": {"year": f'{m["tibetan"]["gender"]} {m["tibetan"]["element"]} {m["tibetan"]["animal"]}', "meaning": None, "votes": 0}},

@@ -580,7 +580,7 @@ def western(base, now_local_date, birth_local, inp):
                                "year_ruler": SIGN_RULER[prof_sign],
                                "year_ruler_natal": planets[SIGN_RULER[prof_sign]] | {"name": SIGN_RULER[prof_sign]}},
         "profections": prof,
-        "solar_returns": solar_returns(lon["Sun"], inp, now_local_date),
+        "solar_returns": solar_returns(lon["Sun"], inp, now_local_date, birth_local),
         "unavailable": {
             "zodiacal_releasing": "not computed: no validated implementation in this environment",
             "transits": "not computed: specific transit windows not requested",
@@ -589,14 +589,14 @@ def western(base, now_local_date, birth_local, inp):
     }
 
 
-def solar_returns(natal_sun, inp, now_date):
+def solar_returns(natal_sun, inp, now_date, birth_local):
     out = []
     n = inp["normalized"]
-    places = {"birthplace": (n["latitude"], n["longitude"], "Asia/Kolkata"),
+    places = {"birthplace": (n["latitude"], n["longitude"], n["iana_zone"]),
               "current_residence": (n["current_residence"]["latitude"], n["current_residence"]["longitude"],
                                     n["current_residence"]["iana_zone"])}
     for yr in (now_date.year - 1, now_date.year):
-        guess = jd_ut(dt.datetime(yr, 8, 25, tzinfo=dt.timezone.utc))
+        guess = jd_ut(dt.datetime(yr, birth_local.month, birth_local.day, tzinfo=dt.timezone.utc))
         jd = solar_longitude_crossing(natal_sun, guess)
         rec = {"year": yr, "utc": iso(jd_to_utc(jd))}
         for k, (la, lo, tz) in places.items():
@@ -659,7 +659,8 @@ SEASON = {"寅": "wood", "卯": "wood", "辰": "earth", "巳": "fire", "午": "f
 def seasonal_state(elem, month_branch):
     s = SEASON[month_branch]
     i, j = ELEMS.index(elem), ELEMS.index(s)
-    return {0: "旺 prosperous", 4: "相 assisted", 1: "休 resting", 2: "囚 confined", 3: "死 dead"}[(i - j) % 5]
+    # i - j = 0 same as season; +1 produced by season; -1 produces season; -2 controls season; +2 controlled by season
+    return {0: "旺 prosperous", 1: "相 assisted", 4: "休 resting", 3: "囚 confined", 2: "死 dead"}[(i - j) % 5]
 
 
 def branch_interactions(branches, labels):
@@ -759,6 +760,18 @@ def day_master_strength(pillars):
             "roots_in_pillars": roots, "verdict": verdict}
 
 
+# Tiao-Hou (seasonal regulation) entries transcribed from Qiong Tong Bao Jian (穷通宝鉴).
+# Only entries needed so far are transcribed; a missing entry is reported as unavailable.
+TIAOHOU = {
+    ("辛", "申"): {"source": "Qiong Tong Bao Jian (穷通宝鉴), 辛金 七月: 壬水为尊，甲戊酌用",
+                  "favorable": ["water (壬)"], "secondary": ["wood (甲)", "earth (戊)"],
+                  "favorable_elements": ["water"]},
+    ("丁", "丑"): {"source": "Qiong Tong Bao Jian (穷通宝鉴), 丁火 三冬 (亥子丑月): 甲木为尊，庚金为佐",
+                  "favorable": ["wood (甲)"], "secondary": ["metal (庚)"],
+                  "favorable_elements": ["wood"]},
+}
+
+
 def useful_god(strength, pillars):
     de = strength["element"]
     i = ELEMS.index(de)
@@ -769,15 +782,13 @@ def useful_god(strength, pillars):
         fuyi = {"favorable": [resource, de], "unfavorable": [officer, output, wealth]}
     else:
         fuyi = {"favorable": [], "unfavorable": [], "note": "balanced: Fu-Yi school gives no decisive preference"}
-    tiaohou = None
-    if pillars["day"][0] == "辛" and pillars["month"][1] == "申":
-        tiaohou = {"source": "Qiong Tong Bao Jian (穷通宝鉴), 辛金 七月: 壬水为尊，甲戊酌用",
-                   "favorable": ["water (壬)"], "secondary": ["wood (甲)", "earth (戊)"]}
-    agree = tiaohou is not None and "water" in fuyi.get("favorable", [])
+    tiaohou = TIAOHOU.get((pillars["day"][0], pillars["month"][1]))
+    agree = [e for e in (tiaohou or {}).get("favorable_elements", []) if e in fuyi.get("favorable", [])]
     return {"fu_yi": {"school": "Fu-Yi 扶抑 (support/suppress)", "rule_chain": f"Day Master {strength['verdict']} -> "
                       + ("drain/control/exhaust favored" if strength["verdict"] == "strong" else "support favored"), **fuyi},
             "tiao_hou": tiaohou,
-            "schools_agree_on": ["water"] if agree else [],
+            "tiao_hou_status": "computed" if tiaohou else "unavailable: no table entry transcribed for this Day Master and month",
+            "schools_agree_on": agree,
             "confidence": "medium" if agree else "low"}
 
 
@@ -934,13 +945,22 @@ def maya(local):
 
 
 def tibetan(local):
+    """Element-animal year only. Losar boundary is handled by a lower bound, not a lineage calendar:
+    Tibetan Losar (Phugpa and Tsurphu) begins a lunar month and falls on, about one day from, or one
+    lunar month after Chinese New Year; it is never earlier than the day before Chinese New Year."""
     y = local.year
-    # Losar always falls between late January and mid-March; a birth outside that window
-    # has an unambiguous Tibetan year regardless of lineage calendar details.
-    in_window = (local.month, local.day) >= (1, 20) and (local.month, local.day) <= (3, 20)
-    ty = y if (local.month, local.day) > (3, 20) else (None if in_window else y - 1)
-    if ty is None:
-        return {"status": "unavailable", "reason": "birth date within possible Losar window; lineage calendar needed"}
+    cny = Lunar.fromYmd(y, 1, 1).getSolar()
+    cny = dt.date(cny.getYear(), cny.getMonth(), cny.getDay())
+    d = local.date()
+    latest_losar = cny + dt.timedelta(days=31)
+    if d < cny - dt.timedelta(days=1):
+        ty, basis = y - 1, f"birth {d} is before {cny - dt.timedelta(days=1)} (day before Chinese New Year {cny}), the earliest possible Losar"
+    elif d > latest_losar:
+        ty, basis = y, f"birth {d} is after {latest_losar}, later than any lineage's Losar ({cny} + one lunar month)"
+    else:
+        return {"status": "unavailable", "reason": f"birth {d} lies between the earliest ({cny - dt.timedelta(days=1)}) and latest ({latest_losar}) possible Losar; lineage calendar needed",
+                "omitted": ["element-animal year", "Mewa", "Parkha", "la/sok/wangthang/lungta/life-force", "annual obstacles"],
+                "omitted_reason": "Losar boundary unresolved without a lineage-specific calendar"}
     idx = (ty - 4) % 60
     stem = STEMS[idx % 10]
     elem = {"wood": "Wood", "fire": "Fire", "earth": "Earth", "metal": "Iron", "water": "Water"}[STEM_ELEMENT[stem]]
@@ -949,7 +969,9 @@ def tibetan(local):
     return {"tibetan_year_gregorian_start": ty, "element": elem, "animal": animals[idx % 12],
             "gender": "male" if idx % 2 == 0 else "female",
             "rabjung": rabjung, "year_in_rabjung": (ty - 1027) % 60 + 1,
-            "losar_boundary": "Losar falls between ~20 Jan and ~20 Mar in any year; birth date is outside that window, so the year is lineage-independent",
+            "chinese_new_year": cny.isoformat(),
+            "losar_boundary": basis + "; year label is lineage-independent",
+            "losar_rule": tibetan.__doc__.strip(),
             "omitted": ["Mewa", "Parkha", "la/sok/wangthang/lungta/life-force", "annual obstacles"],
             "omitted_reason": "no validated lineage-specific implementation available"}
 
@@ -958,13 +980,13 @@ def tibetan(local):
 
 def compute_all(inp, offset_minutes=0.0, now_utc=None, full=True):
     n = inp["normalized"]
-    local, utc = local_instant(n["local_date"], n["local_time_24h"], "Asia/Kolkata", offset_minutes)
+    local, utc = local_instant(n["local_date"], n["local_time_24h"], n["iana_zone"], offset_minutes)
     now_utc = now_utc or dt.datetime.now(dt.timezone.utc)
     base = shared_base(local, utc, inp)
     out = {"instant": {"offset_minutes": offset_minutes, "local": iso(local), "utc": iso(utc)},
            "base": base,
            "jyotisha": jyotisha(base, utc, now_utc),
-           "western": western(base, now_utc.astimezone(ZoneInfo("America/Vancouver")).date(), local, inp),
+           "western": western(base, now_utc.astimezone(ZoneInfo(n["current_residence"]["iana_zone"])).date(), local, inp),
            "bazi": bazi(local, utc, base, inp)}
     if full:
         dates = [f"{y}-06-01" for y in range(local.year + 1, local.year + 41)]
@@ -1028,13 +1050,31 @@ def find_crossing(inp, fn, lo_min, hi_min, step=0.05):
     return None
 
 
+def local_birth_offset_min(c):
+    return dt.datetime.fromisoformat(c["instant"]["local"]).utcoffset().total_seconds() / 60
+
+
+def lunar_month_context(local):
+    """Days from the birth date back to day 1 of its Chinese lunar month and forward to the next day 1."""
+    d = local.date()
+    lu = Solar.fromYmd(d.year, d.month, d.day).getLunar()
+
+    def lday(x):
+        return Solar.fromYmd(x.year, x.month, x.day).getLunar().getDay()
+    d0 = d - dt.timedelta(days=lu.getDay() - 1)
+    d1 = next(d + dt.timedelta(days=k) for k in range(1, 32) if lday(d + dt.timedelta(days=k)) == 1)
+    return {"lunar_month": abs(lu.getMonth()), "lunar_day": lu.getDay(), "is_leap": lu.getMonth() < 0,
+            "month_start": d0.isoformat(), "next_month_start": d1.isoformat(),
+            "days_since_month_start": (d - d0).days, "days_to_next_month": (d1 - d).days}
+
+
 def boundary_audit(inp, c):
     n = inp["normalized"]
     base = c["base"]
     lat, lon = n["latitude"], n["longitude"]
 
     def at(off):
-        local, utc = local_instant(n["local_date"], n["local_time_24h"], "Asia/Kolkata", off)
+        local, utc = local_instant(n["local_date"], n["local_time_24h"], n["iana_zone"], off)
         return jd_ut(utc)
     sid_asc = lambda off: angles(at(off), lat, lon, True)["asc"]
     trop_asc = lambda off: angles(at(off), lat, lon, False)["asc"]
@@ -1080,18 +1120,22 @@ def boundary_audit(inp, c):
     add("Lot of Spirit sign", spirit_sign, 120, "Lot of Spirit house")
 
     def hour_branch(o):
-        local, _ = local_instant(n["local_date"], n["local_time_24h"], "Asia/Kolkata", o)
+        local, _ = local_instant(n["local_date"], n["local_time_24h"], n["iana_zone"], o)
         return BRANCHES[((local.hour + 1) // 2) % 12]
     add("BaZi / Zi Wei two-hour branch (civil clock)", hour_branch, 180, "hour pillar; Zi Wei Ming/Shen palaces and hour stars")
     eot = base["equation_of_time_minutes"]
-    lmt_off = n["longitude"] / 15 * 60 - 330
+    lmt_off = n["longitude"] / 15 * 60 - local_birth_offset_min(c)
+    lat_t = dt.datetime.fromisoformat(base["local_apparent_time"])
+    # two-hour branches start at odd hours (23:00 Zi, 01:00 Chou, ...)
+    lat_min = lat_t.hour * 60 + lat_t.minute + lat_t.second / 60
+    since = (lat_min - 60) % 120
     rows.append({"boundary": "BaZi / Zi Wei two-hour branch (local apparent solar time)",
-                 "value_at_birth": c["bazi"]["solar_time_track_pillars"]["hour"][1],
+                 "value_at_birth": BRANCHES[((lat_t.hour + 1) // 2) % 12],
                  "local_apparent_time": base["local_apparent_time"],
-                 "minutes_to_previous_change": (dt.datetime.fromisoformat(base["local_apparent_time"]) - dt.datetime.fromisoformat(base["local_apparent_time"][:11] + "05:00:00")).total_seconds() / 60,
-                 "minutes_to_next_change": (dt.datetime.fromisoformat(base["local_apparent_time"][:11] + "07:00:00") - dt.datetime.fromisoformat(base["local_apparent_time"])).total_seconds() / 60,
+                 "minutes_to_previous_change": since, "previous_value": BRANCHES[(((lat_t.hour + 1) // 2) - 1) % 12],
+                 "minutes_to_next_change": 120 - since, "next_value": BRANCHES[(((lat_t.hour + 1) // 2) + 1) % 12],
                  "note": f"clock-to-solar correction = {lmt_off + eot:.2f} min (longitude {lmt_off:.2f} + equation of time {eot:.2f})",
-                 "outputs_affected": "hour pillar under solar-time school"})
+                 "outputs_affected": "hour pillar and Zi Wei Ming/Shen palaces under the solar-time school"})
     local_birth = dt.datetime.fromisoformat(c["instant"]["local"])
     rows.append({"boundary": "Civil midnight / late-Zi day boundary",
                  "minutes_since_midnight": local_birth.hour * 60 + local_birth.minute,
@@ -1101,11 +1145,14 @@ def boundary_audit(inp, c):
     rows.append({"boundary": "BaZi sectional solar term (month pillar)",
                  "previous": st["previous_jie"], "next": st["next_jie"],
                  "outputs_affected": "month pillar, Da Yun start"})
+    lmc = lunar_month_context(dt.datetime.fromisoformat(c["instant"]["local"]))
     rows.append({"boundary": "Zi Wei lunar day / leap month",
-                 "lunar_date": c["ziwei"]["lunar"], "note": "lunar day 21 of a non-leap month; nearest new moons ~6-9 days away",
+                 "lunar_date": c["ziwei"]["lunar"], "lunar_month_context": lmc,
+                 "note": f"lunar day {lmc['lunar_day']} of {'a leap' if lmc['is_leap'] else 'a non-leap'} month; "
+                         f"month began {lmc['days_since_month_start']} d before birth, next begins {lmc['days_to_next_month']} d after",
                  "outputs_affected": "Ming/Shen palaces, bureau, star placement"})
     rows.append({"boundary": "Tibetan Losar", "note": c["tibetan"].get("losar_boundary"), "outputs_affected": "element-animal year"})
-    rows.append({"boundary": "Gregorian adoption", "note": "India used the Gregorian civil calendar long before 2005; not applicable",
+    rows.append({"boundary": "Gregorian adoption", "note": "civil calendar has been Gregorian at the birthplace for the whole period; not applicable",
                  "outputs_affected": "none"})
     # Moon nakshatra boundary via Moon speed
     moon = c["base"]["sidereal"]["Moon"]
@@ -1125,9 +1172,13 @@ def main():
     c = compute_all(inp, 0.0, now)
     ens = {}
     sigs = {}
+    hour_alts = {}
     for off in (-unc, 0.0, unc):
         cc = c if off == 0 else compute_all(inp, off, now, full=False)
         sigs[off] = signature(cc)
+        hp = cc["bazi"]["pillars"]["hour"]
+        alt = hour_alts.setdefault(hp, {"offsets_minutes": [], "bazi": cc["bazi"], "ziwei": cc["ziwei"]})
+        alt["offsets_minutes"].append(off)
         ens[str(off)] = {"local": cc["instant"]["local"],
                          "vimshottari_first_md_end": cc["jyotisha"]["vimshottari"]["mahadashas"][0]["end"],
                          "da_yun_start": cc["bazi"]["da_yun"]["start"],
@@ -1138,6 +1189,14 @@ def main():
         vals = {str(o): sigs[o][k] for o in sigs}
         stability[k] = {"values": vals, "classification": "stable" if len(set(vals.values())) == 1 else "sensitive"}
     audit = boundary_audit(inp, c)
+    solar_hour = c["bazi"]["solar_time_track_pillars"]["hour"]
+    for hp, alt in hour_alts.items():
+        alt["contains_reported_instant"] = 0.0 in alt["offsets_minutes"]
+        alt["matches_solar_time_track"] = hp == solar_hour
+    if solar_hour not in hour_alts:
+        hour_alts[solar_hour] = {"offsets_minutes": [], "contains_reported_instant": False, "matches_solar_time_track": True,
+                                 "bazi": None, "ziwei": None,
+                                 "note": "solar-time hour not reached by the civil-clock ensemble; Sinic facts for it not computed"}
     master = {
         "schema": "six-culture-verified-chart/master/v2",
         "generated_utc": iso(now),
@@ -1149,6 +1208,11 @@ def main():
         "ziwei": c["ziwei"], "maya": c["maya"], "tibetan": c["tibetan"],
         "uncertainty_ensemble": {"offsets_minutes": [-unc, 0, unc], "instants": ens, "stability": stability},
         "boundary_audit": audit,
+        "sinic_hour_alternatives": {
+            "rule": "BaZi hour pillar and every Zi Wei placement are recomputed for each two-hour branch reached by the "
+                    "uncertainty ensemble or by the local-apparent-solar-time track; Sinic facts that differ between "
+                    "alternatives are sensitive and are not used as evidence",
+            "alternatives": hour_alts},
         "excluded_methods": {
             "jyotisha": c["jyotisha"]["unavailable"], "western": c["western"]["unavailable"],
             "maya": {"day_sign_meaning": c["maya"]["day_sign_meaning_status"]},

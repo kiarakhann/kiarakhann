@@ -18,12 +18,12 @@ from skyfield import almanac
 from skyfield.api import Loader, wgs84
 from skyfield.framelib import ecliptic_frame
 
-from common import (BRANCHES, PLANETS7, ROOT, SIGNS, STEMS, angdiff, dump, norm, sign_of)
+from common import (BRANCHES, PLANETS7, ROOT, DATA, SIGNS, STEMS, angdiff, dump, norm, sign_of)
 import json
 
 THRESH = {"planet_deg": 0.01, "angle_deg": 0.05, "solar_term_s": 120, "sunrise_s": 60, "node_deg": 0.01}
 
-m = json.load(open(os.path.join(ROOT, "MASTER_DATASET.json")))
+m = json.load(open(os.path.join(DATA, "MASTER_DATASET.json")))
 stab = m["uncertainty_ensemble"]["stability"]
 base = m["shared_astronomy"]
 inp = m["input"]["normalized"]
@@ -107,23 +107,31 @@ for name, pv, vv, key in [("Ascendant", base["angles_tropical"]["asc"], asc, "we
         "spherical formula with Skyfield GAST + true obliquity (hand-coded)", vv, d,
         "tropical, true obliquity, apparent sidereal time", "pass" if d <= THRESH["angle_deg"] else "alert",
         stability_for(key), bd=min(pv % 30, 30 - pv % 30))
-ay = base["ayanamsha_lahiri"]
+# Swiss sidereal mode subtracts the true ayanamsha (mean Lahiri value + nutation in longitude);
+# the validator adds Skyfield's own nutation in longitude to the mean value to match that convention.
+ay = base["ayanamsha_lahiri"] + math.degrees(t._nutation_angles_radians[0])
 sid_asc = base["angles_sidereal"]["asc"]
 d = abs(angdiff(norm(asc - ay), sid_asc))
 row("jyotisha", "Lagna sidereal longitude (Lahiri)", "Swiss Ephemeris (FLG_SIDEREAL)", sid_asc,
-    "independent tropical Asc minus Swiss Lahiri ayanamsha", norm(asc - ay), d,
+    "independent tropical Asc minus (Swiss mean Lahiri ayanamsha + Skyfield nutation)", norm(asc - ay), d,
     "sidereal Lahiri; ayanamsha value itself single-engine", "pass" if d <= THRESH["angle_deg"] else "alert",
     stability_for("jyotisha.lagna_sign"), bd=min(sid_asc % 30, 30 - sid_asc % 30),
     note="ayanamsha is a convention; Lahiri value not independently re-derived")
 j = m["jyotisha"]
-row("jyotisha", "D9 (Navamsa) Lagna", "builder formula", j["lagna"]["d9_sign"], None, None, None,
-    "D9 = floor(lon/3.333) mod 12", "pass", stability_for("jyotisha.D9_lagna"),
-    bd={"minutes_to_previous_change": next(r for r in m["boundary_audit"] if r["boundary"].startswith("Jyotisha D9"))["minutes_to_previous_change"]},
-    conf="low", note="changes to Cancer ~23 s before the recorded minute; treated as unavailable for interpretation")
-row("jyotisha", "D10 (Dasamsa) Lagna", "builder formula", j["lagna"]["d10_sign"], None, None, None,
-    "odd sign from itself, even sign from 9th", "pass", stability_for("jyotisha.D10_lagna"),
-    bd={"minutes": [6.70, 7.51]}, conf="medium",
-    note="stable within +/-1 min but only ~7 min from each boundary")
+def audit_row(prefix):
+    return next(r for r in m["boundary_audit"] if r["boundary"].startswith(prefix))
+
+
+for label, key, prefix, conv in [("D9 (Navamsa) Lagna", "jyotisha.D9_lagna", "Jyotisha D9", "D9 = floor(lon/3.333) mod 12"),
+                                 ("D10 (Dasamsa) Lagna", "jyotisha.D10_lagna", "Jyotisha D10", "odd sign from itself, even sign from 9th")]:
+    ar = audit_row(prefix)
+    near = min(x for x in (ar["minutes_to_previous_change"], ar["minutes_to_next_change"]) if x is not None)
+    stb = stability_for(key)
+    row("jyotisha", label, "builder formula", j["lagna"]["d9_sign" if "D9" in label else "d10_sign"], None, None, None, conv, "pass", stb,
+        bd={"minutes_to_previous_change": ar["minutes_to_previous_change"], "minutes_to_next_change": ar["minutes_to_next_change"]},
+        conf="low" if stb == "sensitive" else "medium",
+        note=("changes inside the +/-1 min interval; unavailable for interpretation" if stb == "sensitive"
+              else f"stable within +/-1 min; nearest boundary {near:.1f} min away"))
 
 # 4. sunrise & sect ---------------------------------------------------------------
 topos = wgs84.latlon(inp["latitude"], inp["longitude"], elevation_m=inp["elevation_m"])
@@ -139,7 +147,7 @@ alt = (eph["earth"] + topos).at(t).observe(eph["sun"]).apparent().altaz("standar
 d = abs(alt - base["sun_altitude"]["apparent_alt"])
 row("western", "Sun apparent altitude (sect)", "Swiss Ephemeris azalt", base["sun_altitude"]["apparent_alt"],
     "Skyfield altaz(standard refraction)", alt, d, "degrees; day chart if > 0", "pass" if d < 0.05 else "alert",
-    stability_for("western.sect"), bd={"minutes_after_sect_change": 28.5})
+    stability_for("western.sect"), bd={"sun_altitude_deg": base["sun_altitude"]["apparent_alt"]})
 
 # 5. solar terms ------------------------------------------------------------------
 
@@ -166,7 +174,8 @@ for key in ("previous_jie", "next_jie"):
         d, "apparent geocentric solar longitude", "pass" if d <= THRESH["solar_term_s"] else "alert",
         bd={"days": st.get("days_before_birth", st.get("days_after_birth"))})
 prev = m["bazi"]["solar_terms"]["previous_jie"]
-row("bazi", "Birth after 立秋 and before 白露 (month pillar 申)", "Swiss Ephemeris", prev["days_before_birth"] > 0 and m["bazi"]["solar_terms"]["next_jie"]["days_after_birth"] > 0,
+nxt = m["bazi"]["solar_terms"]["next_jie"]
+row("bazi", f"Birth after {prev['name_lunar_python']} and before {nxt['name_lunar_python']} (month pillar {m['bazi']['pillars']['month']})", "Swiss Ephemeris", prev["days_before_birth"] > 0 and m["bazi"]["solar_terms"]["next_jie"]["days_after_birth"] > 0,
     "invariant", True, None, "exact sectional-term instants", "pass" if prev["days_before_birth"] > 0 else "fail")
 
 # 6. BaZi pillars ---------------------------------------------------------------------
@@ -176,8 +185,10 @@ row("bazi", "Four Pillars (civil time)", "lunar_python 1.4.8", " ".join(b["pilla
     "hand-coded sexagenary arithmetic + Swiss solar longitude", " ".join(b["independent_pillars"].values()),
     0 if same else 1, "Li Chun year, jie months, 00:00 day boundary", "pass" if same else "fail", stability_for("bazi.pillars"))
 row("bazi", "Four Pillars (local apparent solar time track)", "hand-coded", " ".join(b["solar_time_track_pillars"].values()),
-    None, None, None, "LAT 05:57:24", "pass", stability_for("bazi.solar_track"), conf="high" if not b["solar_time_track_differs"] else "low",
-    note="identical to civil track; no school disagreement on pillars")
+    None, None, None, "LAT " + base["local_apparent_time"][11:], "pass", stability_for("bazi.solar_track"),
+    conf="high" if not b["solar_time_track_differs"] else "low",
+    note="identical to civil track; no school disagreement on pillars" if not b["solar_time_track_differs"]
+    else "differs from the civil track in: " + ", ".join(k for k in b["pillars"] if b["pillars"][k] != b["solar_time_track_pillars"][k]))
 lp_hidden = b["lunar_python_hidden_stems"]
 mine = [b["pillar_detail"][k]["hidden_stems"] for k in ("year", "month", "day", "hour")]
 row("bazi", "Hidden stems", "builder table", mine, "lunar_python table", lp_hidden, 0 if mine == lp_hidden else 1,
@@ -185,23 +196,27 @@ row("bazi", "Hidden stems", "builder table", mine, "lunar_python table", lp_hidd
 row("bazi", "Day Master strength", "rule DMS-1", b["day_master_strength"]["verdict"], None, None, None,
     "documented weighting rule", "pass", conf="medium", note="school-dependent rule; single implementation")
 row("bazi", "Useful God / favorable element", "Fu-Yi + Tiao-Hou", b["useful_god"]["schools_agree_on"], None, None, None,
-    "two named schools", "pass", conf=b["useful_god"]["confidence"], note="schools agree only on water")
+    "two named schools", "pass", conf=b["useful_god"]["confidence"],
+    note=("schools agree on " + ", ".join(b["useful_god"]["schools_agree_on"])) if b["useful_god"]["schools_agree_on"] else "schools do not agree")
 dy = b["da_yun"]
 row("bazi", "Da Yun start", "UTC jie interval x 365.2425/3", dy["start"], "lunar_python sect1/sect2 (Beijing-time input)",
     dy["cross_check_lunar_python"], "~0-5 days", "school-dependent day-count convention", "pass", conf="medium",
-    note="conventions spread 2011-07-05 .. 2011-07-10; all Da Yun boundaries inherit this spread")
+    note="conventions spread " + " .. ".join(sorted([dy["start"][:10], dy["cross_check_lunar_python"]["sect1_start"][:10], dy["cross_check_lunar_python"]["sect2_start"][:10]])[::2])
+    + "; all Da Yun boundaries inherit this spread")
 
 # 7. Vimshottari ---------------------------------------------------------------------
 v = j["vimshottari"]
-total = sum({"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7, "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}.values())
+VY = {"Ketu": 7, "Venus": 20, "Sun": 6, "Moon": 10, "Mars": 7, "Rahu": 18, "Jupiter": 16, "Saturn": 19, "Mercury": 17}
+total = sum(VY.values())
 row("jyotisha", "Vimshottari full cycle = 120 years", "builder", total, "invariant", 120, total - 120, "", "pass" if total == 120 else "fail")
 moon_sid_sky = norm(sky_lon("Moon", t) - ay)
 frac = (moon_sid_sky % (40 / 3)) / (40 / 3)
-bal = (1 - frac) * 20
+bal = (1 - frac) * VY[v["moon_nakshatra"]["lord"]]
+shift = next(r for r in m["boundary_audit"] if r["boundary"].startswith("Moon nakshatra"))["outputs_affected"].split("by ")[-1]
 d_days = abs(bal - v["balance_years_at_birth"]) * 365.25
-row("jyotisha", "Vimshottari balance at birth (Venus, years)", "Swiss Moon", v["balance_years_at_birth"],
-    "Skyfield Moon - Lahiri", bal, d_days, "difference in days", "pass" if d_days < 1 else "alert",
-    stability_for("jyotisha.moon_nakshatra_pada"), note="+/-1 clock minute shifts all dasha boundaries by ~5 days")
+row("jyotisha", f"Vimshottari balance at birth ({v['moon_nakshatra']['lord']}, years)", "Swiss Moon", v["balance_years_at_birth"],
+    "Skyfield Moon - (mean Lahiri + Skyfield nutation)", bal, d_days, "difference in days", "pass" if d_days < 1 else "alert",
+    stability_for("jyotisha.moon_nakshatra_pada"), note=f"+/-1 clock minute shifts all dasha boundaries by {shift}")
 row("jyotisha", "Rahu-Ketu separation", "builder", j["rahu_ketu_separation"], "invariant", 180.0,
     abs(j["rahu_ketu_separation"] - 180), "mean node", "pass" if abs(j["rahu_ketu_separation"] - 180) < 1e-9 else "fail")
 
@@ -227,40 +242,54 @@ row("ziwei", "Decadal period continuity", "iztro + CNY conversion", ok, "invaria
 ok = contiguous([{"start": p["start"] + "T00:00:00", "end": p["end"] + "T00:00:00"} for p in m["western"]["profections"]])
 row("western", "Profection continuity", "builder", ok, "invariant", True, None, "", "pass" if ok else "fail")
 
-# 9. Zi Wei invariants -------------------------------------------------------------------
-pal = z["palaces"]
-names = {p["name"] for p in pal}
-branches = {p["earthly_branch"] for p in pal}
-row("ziwei", "12 unique palaces and branches", "iztro 2.6.1", [len(names), len(branches)], "invariant", [12, 12], None, "",
-    "pass" if len(names) == 12 and len(branches) == 12 else "fail")
-majors = [s["name"] for p in pal for s in p["major_stars"]]
-row("ziwei", "14 major stars each placed once", "iztro", len(majors), "invariant", 14, None, "",
-    "pass" if len(majors) == 14 == len(set(majors)) else "fail")
-bi = {p["earthly_branch"]: BRANCHES.index(p["earthly_branch"]) for p in pal}
-zw = next(p["earthly_branch"] for p in pal if any(s["name"] == "紫微" for s in p["major_stars"]))
-tf = next(p["earthly_branch"] for p in pal if any(s["name"] == "天府" for s in p["major_stars"]))
-okr = (bi[zw] + bi[tf]) % 12 == 4
-row("ziwei", "紫微/天府 mirror across 寅-申 axis", "iztro", f"{zw}/{tf}", "invariant (i+j) mod 12 = 4", okr, None, "", "pass" if okr else "fail")
-lm, ti = z["lunar"]["lunarMonth"], z["request"]["time_index"]
-ming = BRANCHES[(2 + lm - 1 - ti) % 12]
-shen = BRANCHES[(2 + lm - 1 + ti) % 12]
-row("ziwei", "Ming (命) palace branch", "iztro", z["soul_palace_branch"], "hand formula 寅+(month-1)-hour", ming, None, "", "pass" if ming == z["soul_palace_branch"] else "fail", stability_for("ziwei.soul_palace"))
-row("ziwei", "Shen (身) palace branch", "iztro", z["body_palace_branch"], "hand formula 寅+(month-1)+hour", shen, None, "", "pass" if shen == z["body_palace_branch"] else "fail", stability_for("ziwei.body_palace"))
-ys = b["pillars"]["year"][0]
-yin_stem = {"甲": 2, "己": 2, "乙": 4, "庚": 4, "丙": 6, "辛": 6, "丁": 8, "壬": 8, "戊": 0, "癸": 0}[ys]
-ming_stem = STEMS[(yin_stem + (BRANCHES.index(ming) - 2) % 12) % 10]
-ny = LunarUtil.NAYIN[ming_stem + ming]
-bureau_map = {"水": "水二局", "木": "木三局", "金": "金四局", "土": "土五局", "火": "火六局"}
-row("ziwei", "Five Elements Bureau", "iztro", z["five_elements_bureau"], "五虎遁 + lunar_python Na Yin table",
-    f"{ming_stem}{ming} {ny} -> {bureau_map[ny[-1]]}", None, "", "pass" if bureau_map[ny[-1]] == z["five_elements_bureau"] else "fail")
-lp = Solar.fromYmd(2005, 8, 25).getLunar()
-ok = (lp.getMonth(), lp.getDay()) == (z["lunar"]["lunarMonth"], z["lunar"]["lunarDay"]) and z["chinese_date"] == " ".join(b["pillars"].values())
-row("ziwei", "Lunar date and pillars match lunar_python", "iztro", f'{z["lunar"]["lunarMonth"]}/{z["lunar"]["lunarDay"]} {z["chinese_date"]}',
-    "lunar_python", f"{lp.getMonth()}/{lp.getDay()}", None, "Beijing reference lunar calendar", "pass" if ok else "fail")
-muts = {s["name"]: s["mutagen"] for p in pal for s in p["major_stars"] + p["minor_stars"] if s["mutagen"]}
-expect = {"乙": {"天机": "禄", "天梁": "权", "紫微": "科", "太阴": "忌"}}.get(ys)
-row("ziwei", "Four Transformations (birth-year stem " + ys + ")", "iztro", muts, "standard 乙年 table (机梁紫阴)", expect, None, "",
-    "pass" if muts == expect else "fail", conf="high" if muts == expect else "low")
+# 9. Zi Wei invariants (every hour alternative) ------------------------------------------
+SIHUA = {"甲": ("廉贞", "破军", "武曲", "太阳"), "乙": ("天机", "天梁", "紫微", "太阴"), "丙": ("天同", "天机", "文昌", "廉贞"),
+         "丁": ("太阴", "天同", "天机", "巨门"), "戊": ("贪狼", "太阴", "右弼", "天机"), "己": ("武曲", "贪狼", "天梁", "文曲"),
+         "庚": ("太阳", "武曲", "太阴", "天同"), "辛": ("巨门", "太阳", "文曲", "文昌"), "壬": ("天梁", "紫微", "左辅", "武曲"),
+         "癸": ("破军", "巨门", "太阴", "贪狼")}
+bd_ = dt.date.fromisoformat(base["local_civil"][:10])
+lp = Solar.fromYmd(bd_.year, bd_.month, bd_.day).getLunar()
+alts = {hp: a for hp, a in m["sinic_hour_alternatives"]["alternatives"].items() if a["ziwei"]}
+for hp, alt in alts.items():
+    zz = alt["ziwei"]
+    tag = f" [{hp} hour]" if len(alts) > 1 else ""
+    stab_tag = "sensitive" if len(alts) > 1 else "stable"
+    pal = zz["palaces"]
+    names = {p["name"] for p in pal}
+    branches = {p["earthly_branch"] for p in pal}
+    row("ziwei", "12 unique palaces and branches" + tag, "iztro " + zz["implementation"]["version"], [len(names), len(branches)], "invariant", [12, 12], None, "",
+        "pass" if len(names) == 12 and len(branches) == 12 else "fail")
+    majors = [s_["name"] for p in pal for s_ in p["major_stars"]]
+    row("ziwei", "14 major stars each placed once" + tag, "iztro", len(majors), "invariant", 14, None, "",
+        "pass" if len(majors) == 14 == len(set(majors)) else "fail")
+    bi = {p["earthly_branch"]: BRANCHES.index(p["earthly_branch"]) for p in pal}
+    zw = next(p["earthly_branch"] for p in pal if any(s_["name"] == "紫微" for s_ in p["major_stars"]))
+    tf = next(p["earthly_branch"] for p in pal if any(s_["name"] == "天府" for s_ in p["major_stars"]))
+    okr = (bi[zw] + bi[tf]) % 12 == 4
+    row("ziwei", "紫微/天府 mirror across 寅-申 axis" + tag, "iztro", f"{zw}/{tf}", "invariant (i+j) mod 12 = 4", okr, None, "", "pass" if okr else "fail")
+    lm, ti = zz["lunar"]["lunarMonth"], zz["request"]["time_index"]
+    ti_eff = 0 if ti == 12 else ti
+    ming = BRANCHES[(2 + lm - 1 - ti_eff) % 12]
+    shen = BRANCHES[(2 + lm - 1 + ti_eff) % 12]
+    row("ziwei", "Ming (命) palace branch" + tag, "iztro", zz["soul_palace_branch"], "hand formula 寅+(month-1)-hour", ming, None, "",
+        "pass" if ming == zz["soul_palace_branch"] else "fail", stab_tag)
+    row("ziwei", "Shen (身) palace branch" + tag, "iztro", zz["body_palace_branch"], "hand formula 寅+(month-1)+hour", shen, None, "",
+        "pass" if shen == zz["body_palace_branch"] else "fail", stab_tag)
+    ys = lp.getYearGan()
+    yin_stem = {"甲": 2, "己": 2, "乙": 4, "庚": 4, "丙": 6, "辛": 6, "丁": 8, "壬": 8, "戊": 0, "癸": 0}[ys]
+    ming_stem = STEMS[(yin_stem + (BRANCHES.index(ming) - 2) % 12) % 10]
+    ny = LunarUtil.NAYIN[ming_stem + ming]
+    bureau_map = {"水": "水二局", "木": "木三局", "金": "金四局", "土": "土五局", "火": "火六局"}
+    row("ziwei", "Five Elements Bureau" + tag, "iztro", zz["five_elements_bureau"], "五虎遁 + lunar_python Na Yin table",
+        f"{ming_stem}{ming} {ny} -> {bureau_map[ny[-1]]}", None, "", "pass" if bureau_map[ny[-1]] == zz["five_elements_bureau"] else "fail", stab_tag)
+    pillars_alt = " ".join(alt["bazi"]["pillars"].values())
+    ok = (lp.getMonth(), lp.getDay()) == (zz["lunar"]["lunarMonth"], zz["lunar"]["lunarDay"]) and zz["chinese_date"] == pillars_alt
+    row("ziwei", "Lunar date and pillars match lunar_python" + tag, "iztro", f'{zz["lunar"]["lunarMonth"]}/{zz["lunar"]["lunarDay"]} {zz["chinese_date"]}',
+        "lunar_python", f"{lp.getMonth()}/{lp.getDay()} {pillars_alt}", None, "Beijing reference lunar calendar", "pass" if ok else "fail")
+    muts = {s_["name"]: s_["mutagen"] for p in pal for s_ in p["major_stars"] + p["minor_stars"] if s_["mutagen"]}
+    expect = dict(zip(SIHUA[ys], ("禄", "权", "科", "忌")))
+    row("ziwei", f"Four Transformations (lunar-year stem {ys})" + tag, "iztro", muts, "standard 四化 table (iztro default school)", expect, None, "",
+        "pass" if muts == expect else "fail", conf="high" if muts == expect else "low")
 row("ziwei", "Independence disclosure", "iztro (JavaScript)", "single method", None, None, None,
     "py-iztro not used; would wrap the same method", "single-engine", conf="medium")
 
@@ -268,13 +297,13 @@ row("ziwei", "Independence disclosure", "iztro (JavaScript)", "single method", N
 mm = m["maya"]
 ok = mm["round_trip_ok"] and mm["long_count"] == mm["independent"]["long_count"] and \
     f'{mm["tzolkin"]["number"]} {mm["tzolkin"]["day_name_convertdate"]}' == mm["independent"]["tzolkin"] and \
-    f'{mm["haab"]["day"]} {mm["haab"]["month_convertdate"]}' == mm["independent"]["haab"]
+    f'{mm["haab"]["day"]} {mm["haab"]["month_convertdate"].rstrip(chr(39))}' == mm["independent"]["haab"]  # convertdate spells Muwan'/Muwan
 row("maya", "Long Count / Tzolk'in / Haab' (GMT 584283)", "convertdate 2.5.1", f'{mm["long_count"]} {mm["tzolkin"]["number"]} {mm["tzolkin"]["day_name_convertdate"]} {mm["haab"]["day"]} {mm["haab"]["month_convertdate"]}',
     "hand-coded JDN arithmetic", f'{mm["independent"]["long_count"]} {mm["independent"]["calendar_round_independent"] if "calendar_round_independent" in mm["independent"] else mm["calendar_round_independent"]}',
     None, "GMT 584283", "pass" if ok else "fail")
 tb = m["tibetan"]
 row("tibetan", "Element-animal year", "builder (Losar-window argument)", f'{tb["element"]} {tb["animal"]} ({tb["gender"]})', None, None, None,
-    "Phugpa/Tsurphu both place Losar Jan-Mar", "pass", conf="medium", note="no lineage calendar engine; year label only")
+    tb.get("losar_boundary", ""), "pass", conf="medium", note="no lineage calendar engine; year label only")
 
 # summary -------------------------------------------------------------------------------------
 num = [r for r in rows if isinstance(r["difference"], (int, float)) and r["validator"] and "deg" not in str(r["difference"])]

@@ -1,0 +1,3913 @@
+{
+  "schema": "six-culture-verified-chart/synthesis/v2",
+  "primary_clusters": [
+    "jyotisha",
+    "western",
+    "sinic"
+  ],
+  "overlays_non_voting": [
+    "maya",
+    "tibetan"
+  ],
+  "mapping_registry": {
+    "MAP-H": {
+      "description": "house -> domain (Jyotisha and Western whole-sign houses)",
+      "map": {
+        "D1": [
+          1
+        ],
+        "D2": [
+          10
+        ],
+        "D3": [
+          2,
+          11
+        ],
+        "D4": [
+          7
+        ],
+        "D5": [
+          4
+        ],
+        "D6": [
+          5
+        ],
+        "D7": [
+          6
+        ],
+        "D8": [
+          3
+        ],
+        "D9": [
+          9,
+          12
+        ]
+      },
+      "unmapped": [
+        8
+      ]
+    },
+    "MAP-ZW": {
+      "description": "Zi Wei palace -> domain",
+      "map": {
+        "D1": [
+          "命宫"
+        ],
+        "D2": [
+          "官禄"
+        ],
+        "D3": [
+          "财帛"
+        ],
+        "D4": [
+          "夫妻"
+        ],
+        "D5": [
+          "田宅",
+          "父母",
+          "兄弟"
+        ],
+        "D6": [
+          "子女"
+        ],
+        "D7": [
+          "疾厄"
+        ],
+        "D9": [
+          "福德"
+        ]
+      },
+      "unmapped": [
+        "迁移",
+        "仆役"
+      ]
+    },
+    "MAP-TG": {
+      "description": "BaZi ten god -> domain; spouse and children stars follow the chart's gender convention (male: wealth = spouse, officer = children; female: officer = spouse, output = children)",
+      "gender": "female",
+      "map": {
+        "比肩": [
+          "D1"
+        ],
+        "劫财": [
+          "D1"
+        ],
+        "食神": [
+          "D8",
+          "D6"
+        ],
+        "伤官": [
+          "D8",
+          "D6"
+        ],
+        "偏财": [
+          "D3"
+        ],
+        "正财": [
+          "D3"
+        ],
+        "七杀": [
+          "D2",
+          "D4"
+        ],
+        "正官": [
+          "D2",
+          "D4"
+        ],
+        "偏印": [
+          "D8",
+          "D5"
+        ],
+        "正印": [
+          "D8",
+          "D5"
+        ]
+      },
+      "positional": {
+        "year": [
+          "D5"
+        ],
+        "month": [
+          "D5"
+        ],
+        "day_branch": [
+          "D4"
+        ],
+        "hour": [
+          "D6"
+        ]
+      }
+    },
+    "J-DOM-1": "Jyotisha per house: P = 2*occupants(9 grahas) + [lord in 1/4/5/7/9/10] + [lord exalted/moolatrikona/own]; net = sum(occupant weights) + sum(graha-drishti weights) + lord score; weights: Jupiter/Venus/Mercury/Moon +1, Sun/Mars/Saturn/Rahu/Ketu -1; lord score: +1 strong dignity, -1 debilitated (0 if NB-1 neecha-bhanga present), +1 kendra/trikona, -1 in 6/8/12, -1 combust. Multi-house domain: P = max, net = mean.",
+    "W-DOM-1": "Western per whole-sign house: P = 2*occupants(7 planets) + [ruler angular] + [ruler domicile/exaltation]; net = occupant weights + aspect weights + ruler score; occupant weights: benefic of sect +2, other benefic +1, malefic of sect -1, malefic contrary to sect -2, luminaries/Mercury 0; aspects to the sign: benefic by trine/sextile +1, malefic by square/opposition -1 (contrary malefic -2); ruler score: +1 domicile/exaltation, -1 detriment/fall, +1 angular, -1 in 6/8/12, -1 under beams. Multi-house domain: P = max, net = mean.",
+    "Z-DOM-1": "Zi Wei per palace: P = 2*major stars + auspicious(左辅右弼文昌文曲天魁天钺禄存) + malefic(擎羊陀罗火星铃星地空地劫) + transformations; net = major brightness (庙/旺 +1, 得/利/平 0, 不/陷 -1) + 禄/权/科 +1, 忌 -1 + auspicious +1 - malefic 1. Empty palace borrows opposite palace major stars for net only (借星). Multi-palace domain: P = max, net = mean.",
+    "B-DOM-1": "BaZi: P = weighted ten-god occurrences mapped by MAP-TG (visible stem 1.0, hidden main 1.0, middle 0.5, residual 0.3) + positional pillar 0.5; net = sum over those occurrences of element favourability (Fu-Yi favourable +1, unfavourable -1, +0.5 extra for an element both Fu-Yi and Tiao-Hou favour) scaled by weight, + interactions on positional pillars (clash -1, destruction/punishment -0.5, combination +0.5). Bands P: high >= 2.0, medium 1.0-1.99, low < 1.0; polarity threshold +/-1.",
+    "BANDS": "J/W/Z prominence: high P>=4, medium 2-3, low <=1. Polarity (J/W/Z): supportive net>=2, challenging net<=-2, else mixed.",
+    "SINIC-COMBINE": "BaZi and Zi Wei form one vote: if only one speaks, use it; else prominence = lower band if they differ by one, 'medium' if they differ by two; polarity = shared value if equal, else 'mixed'. Internal agreement recorded.",
+    "SINIC-HOUR": "When the hour branch is sensitive, SINIC-COMBINE is evaluated for every hour alternative; the Sinic cluster speaks on a domain, temperament axis or timing activation only if all alternatives give the same result. Otherwise it is recorded as 'sensitive' and does not vote.",
+    "AGREE": "Two cluster themes agree iff prominence band equal AND polarity equal. They conflict iff prominence differs by two bands OR one is supportive and the other challenging. Otherwise neither.",
+    "GRADE": "DIVERGENT if any pair conflicts; else STRONG if all three speak and all pairs agree; else MODERATE if any pair agrees; else WEAK if one speaks or none agree/conflict; INSUFFICIENT if none speak.",
+    "J-TIME-1": "Jyotisha activation = houses owned and occupied by the current Antardasha lord -> MAP-H",
+    "W-TIME-1": "Western activation = profected house + natal house of the year ruler -> MAP-H",
+    "S-TIME-1": "Sinic activation = Da Yun stem and branch-main-qi ten gods -> MAP-TG, plus Zi Wei decadal palace -> MAP-ZW",
+    "T-AX-1": "Temperament: planet/star associations T1 Sun|紫微,太阳; T2 Mars|七杀,破军,武曲; T3 Moon,Jupiter|天同,天梁,太阴; T4 Mercury,Jupiter|天机,巨门,文昌,文曲; T5 Mercury,Moon|贪狼,廉贞,天机; T6 Saturn|天府,天相,武曲. J/W per planet: +1 strong dignity, +1 angular/kendra, +1 Asc/Lagna ruler, -1 debilitated/detriment/fall, -1 in 6/8/12, -1 combust/under beams. Sinic: +1 per associated major star in 命宫 (-1 if 陷/不), +1 life/body ruler association, BaZi strong Day Master +1 to T2. Axis supported by a cluster if score >= 2; counter if <= -1."
+  },
+  "projections": [
+    {
+      "domain": "D1",
+      "system": "jyotisha",
+      "cluster": "jyotisha",
+      "prominence": "medium",
+      "polarity": "mixed",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 1,
+          "sign": "Libra",
+          "occupants": [
+            "Ketu"
+          ],
+          "lord": "Venus",
+          "lord_house": 3,
+          "lord_dignity": "friend",
+          "neecha_bhanga_applied": false,
+          "drishti_from": [],
+          "P": 2,
+          "net": -1
+        }
+      ],
+      "mapping_rule": "MAP-H + J-DOM-1",
+      "scores": {
+        "P": 2,
+        "net": -1.0
+      }
+    },
+    {
+      "domain": "D2",
+      "system": "jyotisha",
+      "cluster": "jyotisha",
+      "prominence": "low",
+      "polarity": "mixed",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 10,
+          "sign": "Cancer",
+          "occupants": [],
+          "lord": "Moon",
+          "lord_house": 9,
+          "lord_dignity": "neutral",
+          "neecha_bhanga_applied": false,
+          "drishti_from": [
+            "Sun"
+          ],
+          "P": 1,
+          "net": 0
+        }
+      ],
+      "mapping_rule": "MAP-H + J-DOM-1",
+      "scores": {
+        "P": 1,
+        "net": 0.0
+      }
+    },
+    {
+      "domain": "D3",
+      "system": "jyotisha",
+      "cluster": "jyotisha",
+      "prominence": "medium",
+      "polarity": "mixed",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 2,
+          "sign": "Scorpio",
+          "occupants": [
+            "Mars"
+          ],
+          "lord": "Mars",
+          "lord_house": 2,
+          "lord_dignity": "own sign",
+          "neecha_bhanga_applied": false,
+          "drishti_from": [],
+          "P": 3,
+          "net": 0
+        },
+        {
+          "house": 11,
+          "sign": "Leo",
+          "occupants": [],
+          "lord": "Sun",
+          "lord_house": 4,
+          "lord_dignity": "great enemy",
+          "neecha_bhanga_applied": false,
+          "drishti_from": [
+            "Saturn"
+          ],
+          "P": 1,
+          "net": 0
+        }
+      ],
+      "mapping_rule": "MAP-H + J-DOM-1",
+      "scores": {
+        "P": 3,
+        "net": 0.0
+      }
+    },
+    {
+      "domain": "D4",
+      "system": "jyotisha",
+      "cluster": "jyotisha",
+      "prominence": "medium",
+      "polarity": "mixed",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 7,
+          "sign": "Aries",
+          "occupants": [
+            "Rahu"
+          ],
+          "lord": "Mars",
+          "lord_house": 2,
+          "lord_dignity": "own sign",
+          "neecha_bhanga_applied": false,
+          "drishti_from": [],
+          "P": 3,
+          "net": 0
+        }
+      ],
+      "mapping_rule": "MAP-H + J-DOM-1",
+      "scores": {
+        "P": 3,
+        "net": 0.0
+      }
+    },
+    {
+      "domain": "D5",
+      "system": "jyotisha",
+      "cluster": "jyotisha",
+      "prominence": "medium",
+      "polarity": "mixed",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 4,
+          "sign": "Capricorn",
+          "occupants": [
+            "Sun"
+          ],
+          "lord": "Saturn",
+          "lord_house": 9,
+          "lord_dignity": "neutral",
+          "neecha_bhanga_applied": false,
+          "drishti_from": [
+            "Jupiter"
+          ],
+          "P": 3,
+          "net": 1
+        }
+      ],
+      "mapping_rule": "MAP-H + J-DOM-1",
+      "scores": {
+        "P": 3,
+        "net": 1.0
+      }
+    },
+    {
+      "domain": "D6",
+      "system": "jyotisha",
+      "cluster": "jyotisha",
+      "prominence": "low",
+      "polarity": "mixed",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 5,
+          "sign": "Aquarius",
+          "occupants": [],
+          "lord": "Saturn",
+          "lord_house": 9,
+          "lord_dignity": "neutral",
+          "neecha_bhanga_applied": false,
+          "drishti_from": [
+            "Mars"
+          ],
+          "P": 1,
+          "net": 0
+        }
+      ],
+      "mapping_rule": "MAP-H + J-DOM-1",
+      "scores": {
+        "P": 1,
+        "net": 0.0
+      }
+    },
+    {
+      "domain": "D7",
+      "system": "jyotisha",
+      "cluster": "jyotisha",
+      "prominence": "low",
+      "polarity": "mixed",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 6,
+          "sign": "Pisces",
+          "occupants": [],
+          "lord": "Jupiter",
+          "lord_house": 12,
+          "lord_dignity": "neutral",
+          "neecha_bhanga_applied": false,
+          "drishti_from": [
+            "Jupiter",
+            "Saturn"
+          ],
+          "P": 0,
+          "net": -1
+        }
+      ],
+      "mapping_rule": "MAP-H + J-DOM-1",
+      "scores": {
+        "P": 0,
+        "net": -1.0
+      }
+    },
+    {
+      "domain": "D8",
+      "system": "jyotisha",
+      "cluster": "jyotisha",
+      "prominence": "high",
+      "polarity": "mixed",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 3,
+          "sign": "Sagittarius",
+          "occupants": [
+            "Mercury",
+            "Venus"
+          ],
+          "lord": "Jupiter",
+          "lord_house": 12,
+          "lord_dignity": "neutral",
+          "neecha_bhanga_applied": false,
+          "drishti_from": [
+            "Moon",
+            "Saturn"
+          ],
+          "P": 4,
+          "net": 1
+        }
+      ],
+      "mapping_rule": "MAP-H + J-DOM-1",
+      "scores": {
+        "P": 4,
+        "net": 1.0
+      }
+    },
+    {
+      "domain": "D9",
+      "system": "jyotisha",
+      "cluster": "jyotisha",
+      "prominence": "high",
+      "polarity": "mixed",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 9,
+          "sign": "Gemini",
+          "occupants": [
+            "Moon",
+            "Saturn"
+          ],
+          "lord": "Mercury",
+          "lord_house": 3,
+          "lord_dignity": "friend",
+          "neecha_bhanga_applied": false,
+          "drishti_from": [
+            "Mercury",
+            "Venus",
+            "Mars"
+          ],
+          "P": 4,
+          "net": 1
+        },
+        {
+          "house": 12,
+          "sign": "Virgo",
+          "occupants": [
+            "Jupiter"
+          ],
+          "lord": "Mercury",
+          "lord_house": 3,
+          "lord_dignity": "friend",
+          "neecha_bhanga_applied": false,
+          "drishti_from": [],
+          "P": 2,
+          "net": 1
+        }
+      ],
+      "mapping_rule": "MAP-H + J-DOM-1",
+      "scores": {
+        "P": 4,
+        "net": 1.0
+      }
+    },
+    {
+      "domain": "D1",
+      "system": "western",
+      "cluster": "western",
+      "prominence": "low",
+      "polarity": "mixed",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 1,
+          "sign": "Scorpio",
+          "occupants": [],
+          "ruler": "Mars",
+          "ruler_house": 2,
+          "ruler_dignity": [
+            "peregrine"
+          ],
+          "aspects_in": [
+            [
+              "Venus",
+              "sextile",
+              1
+            ]
+          ],
+          "P": 0,
+          "net": 1
+        }
+      ],
+      "mapping_rule": "MAP-H + W-DOM-1",
+      "scores": {
+        "P": 0,
+        "net": 1.0
+      }
+    },
+    {
+      "domain": "D2",
+      "system": "western",
+      "cluster": "western",
+      "prominence": "low",
+      "polarity": "mixed",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 10,
+          "sign": "Leo",
+          "occupants": [],
+          "ruler": "Sun",
+          "ruler_house": 4,
+          "ruler_dignity": [
+            "detriment",
+            "peregrine"
+          ],
+          "aspects_in": [
+            [
+              "Jupiter",
+              "sextile",
+              1
+            ]
+          ],
+          "P": 1,
+          "net": 1
+        }
+      ],
+      "mapping_rule": "MAP-H + W-DOM-1",
+      "scores": {
+        "P": 1,
+        "net": 1.0
+      }
+    },
+    {
+      "domain": "D3",
+      "system": "western",
+      "cluster": "western",
+      "prominence": "medium",
+      "polarity": "mixed",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 2,
+          "sign": "Sagittarius",
+          "occupants": [
+            "Mars"
+          ],
+          "ruler": "Jupiter",
+          "ruler_house": 12,
+          "ruler_dignity": [
+            "triplicity_any",
+            "bound"
+          ],
+          "aspects_in": [
+            [
+              "Jupiter",
+              "sextile",
+              1
+            ]
+          ],
+          "P": 2,
+          "net": -1
+        },
+        {
+          "house": 11,
+          "sign": "Virgo",
+          "occupants": [],
+          "ruler": "Mercury",
+          "ruler_house": 3,
+          "ruler_dignity": [
+            "peregrine"
+          ],
+          "aspects_in": [
+            [
+              "Venus",
+              "trine",
+              1
+            ],
+            [
+              "Mars",
+              "square",
+              -1
+            ]
+          ],
+          "P": 0,
+          "net": -1
+        }
+      ],
+      "mapping_rule": "MAP-H + W-DOM-1",
+      "scores": {
+        "P": 2,
+        "net": -1.0
+      }
+    },
+    {
+      "domain": "D4",
+      "system": "western",
+      "cluster": "western",
+      "prominence": "low",
+      "polarity": "mixed",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 7,
+          "sign": "Taurus",
+          "occupants": [],
+          "ruler": "Venus",
+          "ruler_house": 3,
+          "ruler_dignity": [
+            "triplicity_any",
+            "bound"
+          ],
+          "aspects_in": [
+            [
+              "Venus",
+              "trine",
+              1
+            ]
+          ],
+          "P": 0,
+          "net": 1
+        }
+      ],
+      "mapping_rule": "MAP-H + W-DOM-1",
+      "scores": {
+        "P": 0,
+        "net": 1.0
+      }
+    },
+    {
+      "domain": "D5",
+      "system": "western",
+      "cluster": "western",
+      "prominence": "medium",
+      "polarity": "mixed",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 4,
+          "sign": "Aquarius",
+          "occupants": [
+            "Sun"
+          ],
+          "ruler": "Saturn",
+          "ruler_house": 9,
+          "ruler_dignity": [
+            "detriment",
+            "peregrine"
+          ],
+          "aspects_in": [
+            [
+              "Jupiter",
+              "trine",
+              1
+            ]
+          ],
+          "P": 2,
+          "net": 0
+        }
+      ],
+      "mapping_rule": "MAP-H + W-DOM-1",
+      "scores": {
+        "P": 2,
+        "net": 0.0
+      }
+    },
+    {
+      "domain": "D6",
+      "system": "western",
+      "cluster": "western",
+      "prominence": "low",
+      "polarity": "mixed",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 5,
+          "sign": "Pisces",
+          "occupants": [],
+          "ruler": "Jupiter",
+          "ruler_house": 12,
+          "ruler_dignity": [
+            "triplicity_any",
+            "bound"
+          ],
+          "aspects_in": [
+            [
+              "Venus",
+              "sextile",
+              1
+            ],
+            [
+              "Mars",
+              "square",
+              -1
+            ]
+          ],
+          "P": 0,
+          "net": -1
+        }
+      ],
+      "mapping_rule": "MAP-H + W-DOM-1",
+      "scores": {
+        "P": 0,
+        "net": -1.0
+      }
+    },
+    {
+      "domain": "D7",
+      "system": "western",
+      "cluster": "western",
+      "prominence": "low",
+      "polarity": "challenging",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 6,
+          "sign": "Aries",
+          "occupants": [],
+          "ruler": "Mars",
+          "ruler_house": 2,
+          "ruler_dignity": [
+            "peregrine"
+          ],
+          "aspects_in": [
+            [
+              "Saturn",
+              "square",
+              -2
+            ]
+          ],
+          "P": 0,
+          "net": -2
+        }
+      ],
+      "mapping_rule": "MAP-H + W-DOM-1",
+      "scores": {
+        "P": 0,
+        "net": -2.0
+      }
+    },
+    {
+      "domain": "D8",
+      "system": "western",
+      "cluster": "western",
+      "prominence": "high",
+      "polarity": "mixed",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 3,
+          "sign": "Capricorn",
+          "occupants": [
+            "Mercury",
+            "Venus"
+          ],
+          "ruler": "Saturn",
+          "ruler_house": 9,
+          "ruler_dignity": [
+            "detriment",
+            "peregrine"
+          ],
+          "aspects_in": [
+            [
+              "Saturn",
+              "opposition",
+              -2
+            ]
+          ],
+          "P": 4,
+          "net": -1
+        }
+      ],
+      "mapping_rule": "MAP-H + W-DOM-1",
+      "scores": {
+        "P": 4,
+        "net": -1.0
+      }
+    },
+    {
+      "domain": "D9",
+      "system": "western",
+      "cluster": "western",
+      "prominence": "high",
+      "polarity": "mixed",
+      "confidence": "high",
+      "basis": [
+        {
+          "house": 9,
+          "sign": "Cancer",
+          "occupants": [
+            "Moon",
+            "Saturn"
+          ],
+          "ruler": "Moon",
+          "ruler_house": 9,
+          "ruler_dignity": [
+            "domicile",
+            "triplicity_any"
+          ],
+          "aspects_in": [],
+          "P": 5,
+          "net": -1
+        },
+        {
+          "house": 12,
+          "sign": "Libra",
+          "occupants": [
+            "Jupiter"
+          ],
+          "ruler": "Venus",
+          "ruler_house": 3,
+          "ruler_dignity": [
+            "triplicity_any",
+            "bound"
+          ],
+          "aspects_in": [
+            [
+              "Saturn",
+              "square",
+              -2
+            ]
+          ],
+          "P": 2,
+          "net": -1
+        }
+      ],
+      "mapping_rule": "MAP-H + W-DOM-1",
+      "scores": {
+        "P": 5,
+        "net": -1.0
+      }
+    },
+    {
+      "domain": "D1",
+      "system": "bazi+ziwei",
+      "cluster": "sinic",
+      "prominence": "medium",
+      "polarity": "mixed",
+      "confidence": "medium",
+      "basis": {
+        "ziwei": {
+          "prominence": "high",
+          "polarity": "mixed",
+          "basis": [
+            {
+              "palace": "命宫",
+              "branch": "丑",
+              "major_stars": [
+                "天梁(旺)"
+              ],
+              "borrowed_from": null,
+              "borrowed_stars": null,
+              "auspicious": [
+                "天魁"
+              ],
+              "malefic": [
+                "陀罗"
+              ],
+              "P": 4,
+              "net": 1
+            }
+          ],
+          "scores": {
+            "P": 4,
+            "net": 1.0
+          }
+        },
+        "bazi": {
+          "prominence": "medium",
+          "polarity": "supportive",
+          "basis": [
+            "比肩(丁,month stem,w=1.0)",
+            "比肩(丁,day hidden,w=0.5)"
+          ],
+          "scores": {
+            "P": 1.5,
+            "net": 1.5
+          }
+        }
+      },
+      "internal_agreement": "differ",
+      "mapping_rule": "MAP-ZW + Z-DOM-1; MAP-TG + B-DOM-1; SINIC-COMBINE; SINIC-HOUR",
+      "hour_alternatives": {
+        "庚子": {
+          "ziwei": {
+            "prominence": "high",
+            "polarity": "mixed",
+            "basis": [
+              {
+                "palace": "命宫",
+                "branch": "丑",
+                "major_stars": [
+                  "天梁(旺)"
+                ],
+                "borrowed_from": null,
+                "borrowed_stars": null,
+                "auspicious": [
+                  "天魁"
+                ],
+                "malefic": [
+                  "陀罗"
+                ],
+                "P": 4,
+                "net": 1
+              }
+            ],
+            "scores": {
+              "P": 4,
+              "net": 1.0
+            }
+          },
+          "bazi": {
+            "prominence": "medium",
+            "polarity": "supportive",
+            "basis": [
+              "比肩(丁,month stem,w=1.0)",
+              "比肩(丁,day hidden,w=0.5)"
+            ],
+            "scores": {
+              "P": 1.5,
+              "net": 1.5
+            }
+          }
+        },
+        "辛丑": {
+          "ziwei": {
+            "prominence": "high",
+            "polarity": "mixed",
+            "basis": [
+              {
+                "palace": "命宫",
+                "branch": "子",
+                "major_stars": [
+                  "廉贞(平,禄)",
+                  "天相(庙)"
+                ],
+                "borrowed_from": null,
+                "borrowed_stars": null,
+                "auspicious": [],
+                "malefic": [
+                  "地劫"
+                ],
+                "P": 6,
+                "net": 1
+              }
+            ],
+            "scores": {
+              "P": 6,
+              "net": 1.0
+            }
+          },
+          "bazi": {
+            "prominence": "medium",
+            "polarity": "supportive",
+            "basis": [
+              "比肩(丁,month stem,w=1.0)",
+              "比肩(丁,day hidden,w=0.5)"
+            ],
+            "scores": {
+              "P": 1.5,
+              "net": 1.5
+            }
+          }
+        }
+      }
+    },
+    {
+      "domain": "D2",
+      "system": "bazi+ziwei",
+      "cluster": "sinic",
+      "prominence": "medium",
+      "polarity": "mixed",
+      "confidence": "medium",
+      "basis": {
+        "ziwei": {
+          "prominence": "medium",
+          "polarity": "mixed",
+          "basis": [
+            {
+              "palace": "官禄",
+              "branch": "巳",
+              "major_stars": [
+                "太阳(旺,忌)"
+              ],
+              "borrowed_from": null,
+              "borrowed_stars": null,
+              "auspicious": [],
+              "malefic": [],
+              "P": 3,
+              "net": 0
+            }
+          ],
+          "scores": {
+            "P": 3,
+            "net": 0.0
+          }
+        },
+        "bazi": {
+          "prominence": "high",
+          "polarity": "challenging",
+          "basis": [
+            "正官(壬,year hidden,w=0.5)",
+            "七杀(癸,month hidden,w=0.5)",
+            "七杀(癸,hour hidden,w=1.0)"
+          ],
+          "scores": {
+            "P": 2.0,
+            "net": -2.0
+          }
+        }
+      },
+      "internal_agreement": "differ",
+      "mapping_rule": "MAP-ZW + Z-DOM-1; MAP-TG + B-DOM-1; SINIC-COMBINE; SINIC-HOUR",
+      "hour_alternatives": {
+        "庚子": {
+          "ziwei": {
+            "prominence": "medium",
+            "polarity": "mixed",
+            "basis": [
+              {
+                "palace": "官禄",
+                "branch": "巳",
+                "major_stars": [
+                  "太阳(旺,忌)"
+                ],
+                "borrowed_from": null,
+                "borrowed_stars": null,
+                "auspicious": [],
+                "malefic": [],
+                "P": 3,
+                "net": 0
+              }
+            ],
+            "scores": {
+              "P": 3,
+              "net": 0.0
+            }
+          },
+          "bazi": {
+            "prominence": "high",
+            "polarity": "challenging",
+            "basis": [
+              "正官(壬,year hidden,w=0.5)",
+              "七杀(癸,month hidden,w=0.5)",
+              "七杀(癸,hour hidden,w=1.0)"
+            ],
+            "scores": {
+              "P": 2.0,
+              "net": -2.0
+            }
+          }
+        },
+        "辛丑": {
+          "ziwei": {
+            "prominence": "medium",
+            "polarity": "supportive",
+            "basis": [
+              {
+                "palace": "官禄",
+                "branch": "辰",
+                "major_stars": [
+                  "武曲(庙,科)"
+                ],
+                "borrowed_from": null,
+                "borrowed_stars": null,
+                "auspicious": [],
+                "malefic": [],
+                "P": 3,
+                "net": 2
+              }
+            ],
+            "scores": {
+              "P": 3,
+              "net": 2.0
+            }
+          },
+          "bazi": {
+            "prominence": "medium",
+            "polarity": "challenging",
+            "basis": [
+              "正官(壬,year hidden,w=0.5)",
+              "七杀(癸,month hidden,w=0.5)",
+              "七杀(癸,hour hidden,w=0.5)"
+            ],
+            "scores": {
+              "P": 1.5,
+              "net": -1.5
+            }
+          }
+        }
+      }
+    }
+  ],
+  "domains": {
+    "D1": {
+      "name": "Self/identity",
+      "grade": "MODERATE",
+      "agreeing_pairs": [
+        [
+          "jyotisha",
+          "sinic"
+        ]
+      ],
+      "conflicting_pairs": [],
+      "sinic_hour_sensitive": null,
+      "shared_theme": {
+        "prominence": "medium",
+        "polarity": "mixed"
+      },
+      "themes": {
+        "jyotisha": {
+          "prominence": "medium",
+          "polarity": "mixed"
+        },
+        "western": {
+          "prominence": "low",
+          "polarity": "mixed"
+        },
+        "sinic": {
+          "prominence": "medium",
+          "polarity": "mixed"
+        }
+      },
+      "note": null
+    },
+    "D2": {
+      "name": "Career/status",
+      "grade": "MODERATE",
+      "agreeing_pairs": [
+        [
+          "jyotisha",
+          "western"
+        ]
+      ],
+      "conflicting_pairs": [],
+      "sinic_hour_sensitive": null,
+      "shared_theme": {
+        "prominence": "low",
+        "polarity": "mixed"
+      },
+      "themes": {
+        "jyotisha": {
+          "prominence": "low",
+          "polarity": "mixed"
+        },
+        "western": {
+          "prominence": "low",
+          "polarity": "mixed"
+        },
+        "sinic": {
+          "prominence": "medium",
+          "polarity": "mixed"
+        }
+      },
+      "note": null
+    },
+    "D3": {
+      "name": "Wealth/gains",
+      "grade": "MODERATE",
+      "agreeing_pairs": [
+        [
+          "jyotisha",
+          "western"
+        ]
+      ],
+      "conflicting_pairs": [],
+      "sinic_hour_sensitive": {
+        "庚子": {
+          "prominence": "medium",
+          "polarity": "mixed"
+        },
+        "辛丑": {
+          "prominence": "high",
+          "polarity": "mixed"
+        }
+      },
+      "shared_theme": {
+        "prominence": "medium",
+        "polarity": "mixed"
+      },
+      "themes": {
+        "jyotisha": {
+          "prominence": "medium",
+          "polarity": "mixed"
+        },
+        "western": {
+          "prominence": "medium",
+          "polarity": "mixed"
+        },
+        "sinic": null
+      },
+      "note": null
+    },
+    "D4": {
+      "name": "Partnership",
+      "grade": "WEAK",
+      "agreeing_pairs": [],
+      "conflicting_pairs": [],
+      "sinic_hour_sensitive": {
+        "庚子": {
+          "prominence": "high",
+          "polarity": "mixed"
+        },
+        "辛丑": {
+          "prominence": "medium",
+          "polarity": "mixed"
+        }
+      },
+      "shared_theme": null,
+      "themes": {
+        "jyotisha": {
+          "prominence": "medium",
+          "polarity": "mixed"
+        },
+        "western": {
+          "prominence": "low",
+          "polarity": "mixed"
+        },
+        "sinic": null
+      },
+      "note": "WEAK: clusters speak but neither agree nor conflict"
+    },
+    "D5": {
+      "name": "Family/roots/home",
+      "grade": "MODERATE",
+      "agreeing_pairs": [
+        [
+          "jyotisha",
+          "western"
+        ]
+      ],
+      "conflicting_pairs": [],
+      "sinic_hour_sensitive": {
+        "庚子": {
+          "prominence": "high",
+          "polarity": "supportive"
+        },
+        "辛丑": {
+          "prominence": "high",
+          "polarity": "mixed"
+        }
+      },
+      "shared_theme": {
+        "prominence": "medium",
+        "polarity": "mixed"
+      },
+      "themes": {
+        "jyotisha": {
+          "prominence": "medium",
+          "polarity": "mixed"
+        },
+        "western": {
+          "prominence": "medium",
+          "polarity": "mixed"
+        },
+        "sinic": null
+      },
+      "note": null
+    },
+    "D6": {
+      "name": "Children/creation",
+      "grade": "MODERATE",
+      "agreeing_pairs": [
+        [
+          "jyotisha",
+          "western"
+        ]
+      ],
+      "conflicting_pairs": [],
+      "sinic_hour_sensitive": {
+        "庚子": {
+          "prominence": "high",
+          "polarity": "mixed"
+        },
+        "辛丑": {
+          "prominence": "medium",
+          "polarity": "mixed"
+        }
+      },
+      "shared_theme": {
+        "prominence": "low",
+        "polarity": "mixed"
+      },
+      "themes": {
+        "jyotisha": {
+          "prominence": "low",
+          "polarity": "mixed"
+        },
+        "western": {
+          "prominence": "low",
+          "polarity": "mixed"
+        },
+        "sinic": null
+      },
+      "note": null
+    },
+    "D7": {
+      "name": "Health/routine",
+      "grade": "WEAK",
+      "agreeing_pairs": [],
+      "conflicting_pairs": [],
+      "sinic_hour_sensitive": {
+        "庚子": {
+          "prominence": "high",
+          "polarity": "mixed"
+        },
+        "辛丑": {
+          "prominence": "medium",
+          "polarity": "mixed"
+        }
+      },
+      "shared_theme": null,
+      "themes": {
+        "jyotisha": {
+          "prominence": "low",
+          "polarity": "mixed"
+        },
+        "western": {
+          "prominence": "low",
+          "polarity": "challenging"
+        },
+        "sinic": null
+      },
+      "note": "WEAK: clusters speak but neither agree nor conflict"
+    },
+    "D8": {
+      "name": "Mind/education/craft",
+      "grade": "MODERATE",
+      "agreeing_pairs": [
+        [
+          "jyotisha",
+          "western"
+        ]
+      ],
+      "conflicting_pairs": [],
+      "sinic_hour_sensitive": {
+        "庚子": {
+          "prominence": "high",
+          "polarity": "mixed"
+        },
+        "辛丑": {
+          "prominence": "high",
+          "polarity": "challenging"
+        }
+      },
+      "shared_theme": {
+        "prominence": "high",
+        "polarity": "mixed"
+      },
+      "themes": {
+        "jyotisha": {
+          "prominence": "high",
+          "polarity": "mixed"
+        },
+        "western": {
+          "prominence": "high",
+          "polarity": "mixed"
+        },
+        "sinic": null
+      },
+      "note": null
+    },
+    "D9": {
+      "name": "Fortune/spirituality/worldview",
+      "grade": "MODERATE",
+      "agreeing_pairs": [
+        [
+          "jyotisha",
+          "western"
+        ]
+      ],
+      "conflicting_pairs": [],
+      "sinic_hour_sensitive": {
+        "庚子": {
+          "prominence": "high",
+          "polarity": "mixed"
+        },
+        "辛丑": {
+          "prominence": "medium",
+          "polarity": "supportive"
+        }
+      },
+      "shared_theme": {
+        "prominence": "high",
+        "polarity": "mixed"
+      },
+      "themes": {
+        "jyotisha": {
+          "prominence": "high",
+          "polarity": "mixed"
+        },
+        "western": {
+          "prominence": "high",
+          "polarity": "mixed"
+        },
+        "sinic": null
+      },
+      "note": null
+    }
+  },
+  "divergence": {
+    "divergent_over_all_nine": "0/9",
+    "divergent_over_all_nine_pct": 0.0,
+    "divergent_over_sufficient": "0/9",
+    "divergent_over_sufficient_pct": 0.0,
+    "divergent_domains": []
+  },
+  "temperament": {
+    "T1": {
+      "name": "Leadership/visibility",
+      "votes": {
+        "jyotisha": {
+          "score": 1,
+          "status": "not emphasized",
+          "basis": [
+            "Sun kendra H4"
+          ]
+        },
+        "western": {
+          "score": 0,
+          "status": "not emphasized",
+          "basis": [
+            "Sun angular H4",
+            "Sun detriment"
+          ]
+        },
+        "sinic": {
+          "score": 0,
+          "status": "not emphasized",
+          "basis": [],
+          "hour_alternatives": {
+            "庚子": {
+              "score": 0,
+              "basis": []
+            },
+            "辛丑": {
+              "score": 0,
+              "basis": []
+            }
+          }
+        }
+      },
+      "supported_by": [],
+      "countered_by": [],
+      "grade": "NOT EMPHASIZED",
+      "symbolic_overlay": {
+        "maya": "no attributed meaning in dataset; no corroboration or dissent",
+        "tibetan": "no attributed meaning in dataset; no corroboration or dissent"
+      }
+    },
+    "T2": {
+      "name": "Drive/initiative",
+      "votes": {
+        "jyotisha": {
+          "score": 1,
+          "status": "not emphasized",
+          "basis": [
+            "Mars own sign"
+          ]
+        },
+        "western": {
+          "score": 1,
+          "status": "not emphasized",
+          "basis": [
+            "Mars Asc ruler"
+          ]
+        },
+        "sinic": {
+          "score": 0,
+          "status": "not emphasized",
+          "basis": [],
+          "hour_alternatives": {
+            "庚子": {
+              "score": 0,
+              "basis": []
+            },
+            "辛丑": {
+              "score": 0,
+              "basis": []
+            }
+          }
+        }
+      },
+      "supported_by": [],
+      "countered_by": [],
+      "grade": "NOT EMPHASIZED",
+      "symbolic_overlay": {
+        "maya": "no attributed meaning in dataset; no corroboration or dissent",
+        "tibetan": "no attributed meaning in dataset; no corroboration or dissent"
+      }
+    },
+    "T3": {
+      "name": "Nurturing/service",
+      "votes": {
+        "jyotisha": {
+          "score": 0,
+          "status": "not emphasized",
+          "basis": [
+            "Jupiter in H12"
+          ]
+        },
+        "western": {
+          "score": 1,
+          "status": "not emphasized",
+          "basis": [
+            "Moon domicile",
+            "Jupiter in H12"
+          ]
+        },
+        "sinic": {
+          "score": null,
+          "status": "sensitive",
+          "basis": [],
+          "hour_alternatives": {
+            "庚子": {
+              "score": 2,
+              "status": "supported",
+              "basis": [
+                "命宫 天梁(旺) +1",
+                "body ruler 天梁 +1"
+              ]
+            },
+            "辛丑": {
+              "score": 1,
+              "status": "not emphasized",
+              "basis": [
+                "body ruler 天梁 +1"
+              ]
+            }
+          }
+        }
+      },
+      "supported_by": [],
+      "countered_by": [],
+      "grade": "NOT EMPHASIZED",
+      "symbolic_overlay": {
+        "maya": "no attributed meaning in dataset; no corroboration or dissent",
+        "tibetan": "no attributed meaning in dataset; no corroboration or dissent"
+      }
+    },
+    "T4": {
+      "name": "Intellect/craft",
+      "votes": {
+        "jyotisha": {
+          "score": 0,
+          "status": "not emphasized",
+          "basis": [
+            "Jupiter in H12"
+          ]
+        },
+        "western": {
+          "score": -1,
+          "status": "counter",
+          "basis": [
+            "Mercury under beams",
+            "Jupiter in H12"
+          ]
+        },
+        "sinic": {
+          "score": 1,
+          "status": "not emphasized",
+          "basis": [
+            "life ruler 巨门 +1"
+          ],
+          "hour_alternatives": {
+            "庚子": {
+              "score": 1,
+              "basis": [
+                "life ruler 巨门 +1"
+              ]
+            },
+            "辛丑": {
+              "score": 0,
+              "basis": []
+            }
+          }
+        }
+      },
+      "supported_by": [],
+      "countered_by": [
+        "western"
+      ],
+      "grade": "WEAK (counter)",
+      "symbolic_overlay": {
+        "maya": "no attributed meaning in dataset; no corroboration or dissent",
+        "tibetan": "no attributed meaning in dataset; no corroboration or dissent"
+      }
+    },
+    "T5": {
+      "name": "Adaptability",
+      "votes": {
+        "jyotisha": {
+          "score": 0,
+          "status": "not emphasized",
+          "basis": []
+        },
+        "western": {
+          "score": 1,
+          "status": "not emphasized",
+          "basis": [
+            "Mercury under beams",
+            "Moon domicile"
+          ]
+        },
+        "sinic": {
+          "score": null,
+          "status": "sensitive",
+          "basis": [],
+          "hour_alternatives": {
+            "庚子": {
+              "score": 0,
+              "status": "not emphasized",
+              "basis": []
+            },
+            "辛丑": {
+              "score": 2,
+              "status": "supported",
+              "basis": [
+                "命宫 廉贞(平) +1",
+                "life ruler 贪狼 +1"
+              ]
+            }
+          }
+        }
+      },
+      "supported_by": [],
+      "countered_by": [],
+      "grade": "NOT EMPHASIZED",
+      "symbolic_overlay": {
+        "maya": "no attributed meaning in dataset; no corroboration or dissent",
+        "tibetan": "no attributed meaning in dataset; no corroboration or dissent"
+      }
+    },
+    "T6": {
+      "name": "Discipline/structure",
+      "votes": {
+        "jyotisha": {
+          "score": 0,
+          "status": "not emphasized",
+          "basis": []
+        },
+        "western": {
+          "score": -1,
+          "status": "counter",
+          "basis": [
+            "Saturn detriment"
+          ]
+        },
+        "sinic": {
+          "score": 0,
+          "status": "not emphasized",
+          "basis": [],
+          "hour_alternatives": {
+            "庚子": {
+              "score": 0,
+              "basis": []
+            },
+            "辛丑": {
+              "score": 1,
+              "basis": [
+                "命宫 天相(庙) +1"
+              ]
+            }
+          }
+        }
+      },
+      "supported_by": [],
+      "countered_by": [
+        "western"
+      ],
+      "grade": "WEAK (counter)",
+      "symbolic_overlay": {
+        "maya": "no attributed meaning in dataset; no corroboration or dissent",
+        "tibetan": "no attributed meaning in dataset; no corroboration or dissent"
+      }
+    }
+  },
+  "chronology": {
+    "reference_date": "2026-10-05",
+    "horizon": "2045-01-23",
+    "base_rate": {
+      "share_of_days_with_any_moderate_or_strong": 0.9444216290212183,
+      "share_of_days_with_any_strong": 0.12854209445585216,
+      "note": "high base rate means individual MODERATE windows carry little information"
+    },
+    "current": {
+      "start": "2026-01-23",
+      "end": "2027-01-23",
+      "convergences": [
+        {
+          "domain": "D2",
+          "domain_name": "Career/status",
+          "clusters": [
+            "western",
+            "sinic"
+          ],
+          "level": "MODERATE"
+        },
+        {
+          "domain": "D5",
+          "domain_name": "Family/roots/home",
+          "clusters": [
+            "western",
+            "sinic"
+          ],
+          "level": "MODERATE"
+        },
+        {
+          "domain": "D8",
+          "domain_name": "Mind/education/craft",
+          "clusters": [
+            "jyotisha",
+            "sinic"
+          ],
+          "level": "MODERATE"
+        }
+      ],
+      "active": {
+        "jyotisha": [
+          "Jupiter/Venus MD/AD"
+        ],
+        "western": [
+          "profection H10 Leo (Sun in natal H4)"
+        ],
+        "sinic": [
+          "Da Yun 乙亥 (偏印/正官)",
+          "Zi Wei decadal 兄弟 子 [庚子 hour]",
+          "Zi Wei decadal 兄弟 亥 [辛丑 hour]"
+        ]
+      }
+    },
+    "upcoming": [
+      {
+        "start": "2027-01-23",
+        "end": "2028-07-10",
+        "convergences": [
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "western",
+              "sinic"
+            ],
+            "level": "STRONG"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Venus MD/AD"
+          ],
+          "western": [
+            "profection H11 Virgo (Mercury in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2028-07-10",
+        "end": "2029-01-23",
+        "convergences": [
+          {
+            "domain": "D5",
+            "domain_name": "Family/roots/home",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Sun MD/AD"
+          ],
+          "western": [
+            "profection H12 Libra (Venus in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2029-01-23",
+        "end": "2029-04-28",
+        "convergences": [
+          {
+            "domain": "D3",
+            "domain_name": "Wealth/gains",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D5",
+            "domain_name": "Family/roots/home",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Sun MD/AD"
+          ],
+          "western": [
+            "profection H1 Scorpio (Mars in natal H2)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2029-04-28",
+        "end": "2030-01-23",
+        "convergences": [
+          {
+            "domain": "D2",
+            "domain_name": "Career/status",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Moon MD/AD"
+          ],
+          "western": [
+            "profection H1 Scorpio (Mars in natal H2)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2030-01-23",
+        "end": "2030-08-28",
+        "convergences": [
+          {
+            "domain": "D2",
+            "domain_name": "Career/status",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D9",
+            "domain_name": "Fortune/spirituality/worldview",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Moon MD/AD"
+          ],
+          "western": [
+            "profection H2 Sagittarius (Jupiter in natal H12)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2030-08-28",
+        "end": "2031-01-23",
+        "convergences": [
+          {
+            "domain": "D3",
+            "domain_name": "Wealth/gains",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D4",
+            "domain_name": "Partnership",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Mars MD/AD"
+          ],
+          "western": [
+            "profection H2 Sagittarius (Jupiter in natal H12)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      }
+    ],
+    "next_strong": {
+      "start": "2027-01-23",
+      "end": "2028-07-10",
+      "convergences": [
+        {
+          "domain": "D8",
+          "domain_name": "Mind/education/craft",
+          "clusters": [
+            "jyotisha",
+            "western",
+            "sinic"
+          ],
+          "level": "STRONG"
+        }
+      ],
+      "active": {
+        "jyotisha": [
+          "Jupiter/Venus MD/AD"
+        ],
+        "western": [
+          "profection H11 Virgo (Mercury in natal H3)"
+        ],
+        "sinic": [
+          "Da Yun 乙亥 (偏印/正官)",
+          "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+          "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+        ]
+      }
+    },
+    "timeline": [
+      {
+        "start": "2005-01-23",
+        "end": "2006-01-23",
+        "convergences": [],
+        "active": {
+          "jyotisha": [
+            "Rahu/Jupiter MD/AD"
+          ],
+          "western": [
+            "profection H1 Scorpio (Mars in natal H2)"
+          ],
+          "sinic": []
+        }
+      },
+      {
+        "start": "2006-01-23",
+        "end": "2007-12-10",
+        "convergences": [
+          {
+            "domain": "D9",
+            "domain_name": "Fortune/spirituality/worldview",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Rahu/Saturn MD/AD"
+          ],
+          "western": [
+            "profection H2 Sagittarius (Jupiter in natal H12)"
+          ],
+          "sinic": []
+        }
+      },
+      {
+        "start": "2007-12-10",
+        "end": "2008-01-23",
+        "convergences": [
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D9",
+            "domain_name": "Fortune/spirituality/worldview",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Rahu/Mercury MD/AD"
+          ],
+          "western": [
+            "profection H3 Capricorn (Saturn in natal H9)"
+          ],
+          "sinic": [
+            "Zi Wei decadal 命宫 丑 [庚子 hour]",
+            "Zi Wei decadal 命宫 子 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2008-01-23",
+        "end": "2010-01-23",
+        "convergences": [
+          {
+            "domain": "D9",
+            "domain_name": "Fortune/spirituality/worldview",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Rahu/Mercury MD/AD"
+          ],
+          "western": [
+            "profection H4 Aquarius (Saturn in natal H9)"
+          ],
+          "sinic": [
+            "Zi Wei decadal 命宫 丑 [庚子 hour]",
+            "Zi Wei decadal 命宫 子 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2010-01-23",
+        "end": "2010-06-29",
+        "convergences": [],
+        "active": {
+          "jyotisha": [
+            "Rahu/Mercury MD/AD"
+          ],
+          "western": [
+            "profection H6 Aries (Mars in natal H2)"
+          ],
+          "sinic": [
+            "Zi Wei decadal 命宫 丑 [庚子 hour]",
+            "Zi Wei decadal 命宫 子 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2010-06-29",
+        "end": "2011-01-23",
+        "convergences": [
+          {
+            "domain": "D1",
+            "domain_name": "Self/identity",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Rahu/Ketu MD/AD"
+          ],
+          "western": [
+            "profection H6 Aries (Mars in natal H2)"
+          ],
+          "sinic": [
+            "Zi Wei decadal 命宫 丑 [庚子 hour]",
+            "Zi Wei decadal 命宫 子 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2011-01-23",
+        "end": "2011-07-17",
+        "convergences": [
+          {
+            "domain": "D1",
+            "domain_name": "Self/identity",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D4",
+            "domain_name": "Partnership",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Rahu/Ketu MD/AD"
+          ],
+          "western": [
+            "profection H7 Taurus (Venus in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 丙子 (劫财/七杀)",
+            "Zi Wei decadal 命宫 丑 [庚子 hour]",
+            "Zi Wei decadal 命宫 子 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2011-07-17",
+        "end": "2012-01-23",
+        "convergences": [
+          {
+            "domain": "D1",
+            "domain_name": "Self/identity",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D4",
+            "domain_name": "Partnership",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Rahu/Venus MD/AD"
+          ],
+          "western": [
+            "profection H7 Taurus (Venus in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 丙子 (劫财/七杀)",
+            "Zi Wei decadal 命宫 丑 [庚子 hour]",
+            "Zi Wei decadal 命宫 子 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2012-01-23",
+        "end": "2013-01-23",
+        "convergences": [
+          {
+            "domain": "D1",
+            "domain_name": "Self/identity",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Rahu/Venus MD/AD"
+          ],
+          "western": [
+            "profection H8 Gemini (Mercury in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 丙子 (劫财/七杀)",
+            "Zi Wei decadal 命宫 丑 [庚子 hour]",
+            "Zi Wei decadal 命宫 子 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2013-01-23",
+        "end": "2014-01-23",
+        "convergences": [
+          {
+            "domain": "D1",
+            "domain_name": "Self/identity",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Rahu/Venus MD/AD"
+          ],
+          "western": [
+            "profection H9 Cancer (Moon in natal H9)"
+          ],
+          "sinic": [
+            "Da Yun 丙子 (劫财/七杀)",
+            "Zi Wei decadal 命宫 丑 [庚子 hour]",
+            "Zi Wei decadal 命宫 子 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2014-01-23",
+        "end": "2014-07-17",
+        "convergences": [
+          {
+            "domain": "D1",
+            "domain_name": "Self/identity",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D2",
+            "domain_name": "Career/status",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Rahu/Venus MD/AD"
+          ],
+          "western": [
+            "profection H10 Leo (Sun in natal H4)"
+          ],
+          "sinic": [
+            "Da Yun 丙子 (劫财/七杀)",
+            "Zi Wei decadal 命宫 丑 [庚子 hour]",
+            "Zi Wei decadal 命宫 子 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2014-07-17",
+        "end": "2015-01-23",
+        "convergences": [
+          {
+            "domain": "D2",
+            "domain_name": "Career/status",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D5",
+            "domain_name": "Family/roots/home",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Rahu/Sun MD/AD"
+          ],
+          "western": [
+            "profection H10 Leo (Sun in natal H4)"
+          ],
+          "sinic": [
+            "Da Yun 丙子 (劫财/七杀)",
+            "Zi Wei decadal 命宫 丑 [庚子 hour]",
+            "Zi Wei decadal 命宫 子 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2015-01-23",
+        "end": "2015-06-11",
+        "convergences": [
+          {
+            "domain": "D3",
+            "domain_name": "Wealth/gains",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Rahu/Sun MD/AD"
+          ],
+          "western": [
+            "profection H11 Virgo (Mercury in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 丙子 (劫财/七杀)",
+            "Zi Wei decadal 命宫 丑 [庚子 hour]",
+            "Zi Wei decadal 命宫 子 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2015-06-11",
+        "end": "2016-01-23",
+        "convergences": [
+          {
+            "domain": "D2",
+            "domain_name": "Career/status",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Rahu/Moon MD/AD"
+          ],
+          "western": [
+            "profection H11 Virgo (Mercury in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 丙子 (劫财/七杀)",
+            "Zi Wei decadal 命宫 丑 [庚子 hour]",
+            "Zi Wei decadal 命宫 子 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2016-01-23",
+        "end": "2016-12-09",
+        "convergences": [
+          {
+            "domain": "D2",
+            "domain_name": "Career/status",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D9",
+            "domain_name": "Fortune/spirituality/worldview",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Rahu/Moon MD/AD"
+          ],
+          "western": [
+            "profection H12 Libra (Venus in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 丙子 (劫财/七杀)",
+            "Zi Wei decadal 命宫 丑 [庚子 hour]",
+            "Zi Wei decadal 命宫 子 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2016-12-09",
+        "end": "2017-01-23",
+        "convergences": [
+          {
+            "domain": "D4",
+            "domain_name": "Partnership",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Rahu/Mars MD/AD"
+          ],
+          "western": [
+            "profection H12 Libra (Venus in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 丙子 (劫财/七杀)",
+            "Zi Wei decadal 兄弟 子 [庚子 hour]",
+            "Zi Wei decadal 兄弟 亥 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2017-01-23",
+        "end": "2017-12-28",
+        "convergences": [
+          {
+            "domain": "D1",
+            "domain_name": "Self/identity",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D3",
+            "domain_name": "Wealth/gains",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D4",
+            "domain_name": "Partnership",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Rahu/Mars MD/AD"
+          ],
+          "western": [
+            "profection H1 Scorpio (Mars in natal H2)"
+          ],
+          "sinic": [
+            "Da Yun 丙子 (劫财/七杀)",
+            "Zi Wei decadal 兄弟 子 [庚子 hour]",
+            "Zi Wei decadal 兄弟 亥 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2017-12-28",
+        "end": "2018-01-23",
+        "convergences": [
+          {
+            "domain": "D1",
+            "domain_name": "Self/identity",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Jupiter MD/AD"
+          ],
+          "western": [
+            "profection H1 Scorpio (Mars in natal H2)"
+          ],
+          "sinic": [
+            "Da Yun 丙子 (劫财/七杀)",
+            "Zi Wei decadal 兄弟 子 [庚子 hour]",
+            "Zi Wei decadal 兄弟 亥 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2018-01-23",
+        "end": "2019-01-23",
+        "convergences": [
+          {
+            "domain": "D9",
+            "domain_name": "Fortune/spirituality/worldview",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Jupiter MD/AD"
+          ],
+          "western": [
+            "profection H2 Sagittarius (Jupiter in natal H12)"
+          ],
+          "sinic": [
+            "Da Yun 丙子 (劫财/七杀)",
+            "Zi Wei decadal 兄弟 子 [庚子 hour]",
+            "Zi Wei decadal 兄弟 亥 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2019-01-23",
+        "end": "2020-01-23",
+        "convergences": [
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D9",
+            "domain_name": "Fortune/spirituality/worldview",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Jupiter MD/AD"
+          ],
+          "western": [
+            "profection H3 Capricorn (Saturn in natal H9)"
+          ],
+          "sinic": [
+            "Da Yun 丙子 (劫财/七杀)",
+            "Zi Wei decadal 兄弟 子 [庚子 hour]",
+            "Zi Wei decadal 兄弟 亥 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2020-01-23",
+        "end": "2020-02-15",
+        "convergences": [
+          {
+            "domain": "D5",
+            "domain_name": "Family/roots/home",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D9",
+            "domain_name": "Fortune/spirituality/worldview",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Jupiter MD/AD"
+          ],
+          "western": [
+            "profection H4 Aquarius (Saturn in natal H9)"
+          ],
+          "sinic": [
+            "Da Yun 丙子 (劫财/七杀)",
+            "Zi Wei decadal 兄弟 子 [庚子 hour]",
+            "Zi Wei decadal 兄弟 亥 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2020-02-15",
+        "end": "2021-01-23",
+        "convergences": [
+          {
+            "domain": "D5",
+            "domain_name": "Family/roots/home",
+            "clusters": [
+              "jyotisha",
+              "western",
+              "sinic"
+            ],
+            "level": "STRONG"
+          },
+          {
+            "domain": "D9",
+            "domain_name": "Fortune/spirituality/worldview",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Saturn MD/AD"
+          ],
+          "western": [
+            "profection H4 Aquarius (Saturn in natal H9)"
+          ],
+          "sinic": [
+            "Da Yun 丙子 (劫财/七杀)",
+            "Zi Wei decadal 兄弟 子 [庚子 hour]",
+            "Zi Wei decadal 兄弟 亥 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2021-01-23",
+        "end": "2022-01-23",
+        "convergences": [
+          {
+            "domain": "D5",
+            "domain_name": "Family/roots/home",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D6",
+            "domain_name": "Children/creation",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D9",
+            "domain_name": "Fortune/spirituality/worldview",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Saturn MD/AD"
+          ],
+          "western": [
+            "profection H5 Pisces (Jupiter in natal H12)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 兄弟 子 [庚子 hour]",
+            "Zi Wei decadal 兄弟 亥 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2022-01-23",
+        "end": "2022-08-28",
+        "convergences": [
+          {
+            "domain": "D5",
+            "domain_name": "Family/roots/home",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Saturn MD/AD"
+          ],
+          "western": [
+            "profection H6 Aries (Mars in natal H2)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 兄弟 子 [庚子 hour]",
+            "Zi Wei decadal 兄弟 亥 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2022-08-28",
+        "end": "2023-01-23",
+        "convergences": [
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Mercury MD/AD"
+          ],
+          "western": [
+            "profection H6 Aries (Mars in natal H2)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 兄弟 子 [庚子 hour]",
+            "Zi Wei decadal 兄弟 亥 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2023-01-23",
+        "end": "2024-01-23",
+        "convergences": [
+          {
+            "domain": "D4",
+            "domain_name": "Partnership",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "western",
+              "sinic"
+            ],
+            "level": "STRONG"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Mercury MD/AD"
+          ],
+          "western": [
+            "profection H7 Taurus (Venus in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 兄弟 子 [庚子 hour]",
+            "Zi Wei decadal 兄弟 亥 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2024-01-23",
+        "end": "2024-12-03",
+        "convergences": [
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "western",
+              "sinic"
+            ],
+            "level": "STRONG"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Mercury MD/AD"
+          ],
+          "western": [
+            "profection H8 Gemini (Mercury in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 兄弟 子 [庚子 hour]",
+            "Zi Wei decadal 兄弟 亥 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2024-12-03",
+        "end": "2025-01-23",
+        "convergences": [
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Ketu MD/AD"
+          ],
+          "western": [
+            "profection H8 Gemini (Mercury in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 兄弟 子 [庚子 hour]",
+            "Zi Wei decadal 兄弟 亥 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2025-01-23",
+        "end": "2025-11-09",
+        "convergences": [],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Ketu MD/AD"
+          ],
+          "western": [
+            "profection H9 Cancer (Moon in natal H9)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 兄弟 子 [庚子 hour]",
+            "Zi Wei decadal 兄弟 亥 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2025-11-09",
+        "end": "2026-01-23",
+        "convergences": [
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Venus MD/AD"
+          ],
+          "western": [
+            "profection H9 Cancer (Moon in natal H9)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 兄弟 子 [庚子 hour]",
+            "Zi Wei decadal 兄弟 亥 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2026-01-23",
+        "end": "2027-01-23",
+        "convergences": [
+          {
+            "domain": "D2",
+            "domain_name": "Career/status",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D5",
+            "domain_name": "Family/roots/home",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Venus MD/AD"
+          ],
+          "western": [
+            "profection H10 Leo (Sun in natal H4)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 兄弟 子 [庚子 hour]",
+            "Zi Wei decadal 兄弟 亥 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2027-01-23",
+        "end": "2028-07-10",
+        "convergences": [
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "western",
+              "sinic"
+            ],
+            "level": "STRONG"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Venus MD/AD"
+          ],
+          "western": [
+            "profection H11 Virgo (Mercury in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2028-07-10",
+        "end": "2029-01-23",
+        "convergences": [
+          {
+            "domain": "D5",
+            "domain_name": "Family/roots/home",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Sun MD/AD"
+          ],
+          "western": [
+            "profection H12 Libra (Venus in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2029-01-23",
+        "end": "2029-04-28",
+        "convergences": [
+          {
+            "domain": "D3",
+            "domain_name": "Wealth/gains",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D5",
+            "domain_name": "Family/roots/home",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Sun MD/AD"
+          ],
+          "western": [
+            "profection H1 Scorpio (Mars in natal H2)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2029-04-28",
+        "end": "2030-01-23",
+        "convergences": [
+          {
+            "domain": "D2",
+            "domain_name": "Career/status",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Moon MD/AD"
+          ],
+          "western": [
+            "profection H1 Scorpio (Mars in natal H2)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2030-01-23",
+        "end": "2030-08-28",
+        "convergences": [
+          {
+            "domain": "D2",
+            "domain_name": "Career/status",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D9",
+            "domain_name": "Fortune/spirituality/worldview",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Moon MD/AD"
+          ],
+          "western": [
+            "profection H2 Sagittarius (Jupiter in natal H12)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2030-08-28",
+        "end": "2031-01-23",
+        "convergences": [
+          {
+            "domain": "D3",
+            "domain_name": "Wealth/gains",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D4",
+            "domain_name": "Partnership",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Mars MD/AD"
+          ],
+          "western": [
+            "profection H2 Sagittarius (Jupiter in natal H12)"
+          ],
+          "sinic": [
+            "Da Yun 乙亥 (偏印/正官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2031-01-23",
+        "end": "2032-01-23",
+        "convergences": [
+          {
+            "domain": "D4",
+            "domain_name": "Partnership",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Mars MD/AD"
+          ],
+          "western": [
+            "profection H3 Capricorn (Saturn in natal H9)"
+          ],
+          "sinic": [
+            "Da Yun 甲戌 (正印/伤官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2032-01-23",
+        "end": "2033-01-23",
+        "convergences": [
+          {
+            "domain": "D4",
+            "domain_name": "Partnership",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D5",
+            "domain_name": "Family/roots/home",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Rahu MD/AD"
+          ],
+          "western": [
+            "profection H4 Aquarius (Saturn in natal H9)"
+          ],
+          "sinic": [
+            "Da Yun 甲戌 (正印/伤官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2033-01-23",
+        "end": "2033-12-28",
+        "convergences": [
+          {
+            "domain": "D4",
+            "domain_name": "Partnership",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D6",
+            "domain_name": "Children/creation",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Jupiter/Rahu MD/AD"
+          ],
+          "western": [
+            "profection H5 Pisces (Jupiter in natal H12)"
+          ],
+          "sinic": [
+            "Da Yun 甲戌 (正印/伤官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2033-12-28",
+        "end": "2034-01-23",
+        "convergences": [
+          {
+            "domain": "D5",
+            "domain_name": "Family/roots/home",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D6",
+            "domain_name": "Children/creation",
+            "clusters": [
+              "jyotisha",
+              "western",
+              "sinic"
+            ],
+            "level": "STRONG"
+          },
+          {
+            "domain": "D9",
+            "domain_name": "Fortune/spirituality/worldview",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Saturn/Saturn MD/AD"
+          ],
+          "western": [
+            "profection H5 Pisces (Jupiter in natal H12)"
+          ],
+          "sinic": [
+            "Da Yun 甲戌 (正印/伤官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2034-01-23",
+        "end": "2035-01-23",
+        "convergences": [
+          {
+            "domain": "D5",
+            "domain_name": "Family/roots/home",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D6",
+            "domain_name": "Children/creation",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Saturn/Saturn MD/AD"
+          ],
+          "western": [
+            "profection H6 Aries (Mars in natal H2)"
+          ],
+          "sinic": [
+            "Da Yun 甲戌 (正印/伤官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2035-01-23",
+        "end": "2036-01-23",
+        "convergences": [
+          {
+            "domain": "D4",
+            "domain_name": "Partnership",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D5",
+            "domain_name": "Family/roots/home",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D6",
+            "domain_name": "Children/creation",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Saturn/Saturn MD/AD"
+          ],
+          "western": [
+            "profection H7 Taurus (Venus in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 甲戌 (正印/伤官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2036-01-23",
+        "end": "2036-12-31",
+        "convergences": [
+          {
+            "domain": "D5",
+            "domain_name": "Family/roots/home",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D6",
+            "domain_name": "Children/creation",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Saturn/Saturn MD/AD"
+          ],
+          "western": [
+            "profection H8 Gemini (Mercury in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 甲戌 (正印/伤官)",
+            "Zi Wei decadal 夫妻 亥 [庚子 hour]",
+            "Zi Wei decadal 夫妻 戌 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2036-12-31",
+        "end": "2037-01-23",
+        "convergences": [
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "western",
+              "sinic"
+            ],
+            "level": "STRONG"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Saturn/Mercury MD/AD"
+          ],
+          "western": [
+            "profection H8 Gemini (Mercury in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 甲戌 (正印/伤官)",
+            "Zi Wei decadal 子女 戌 [庚子 hour]",
+            "Zi Wei decadal 子女 酉 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2037-01-23",
+        "end": "2038-01-23",
+        "convergences": [
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D9",
+            "domain_name": "Fortune/spirituality/worldview",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Saturn/Mercury MD/AD"
+          ],
+          "western": [
+            "profection H9 Cancer (Moon in natal H9)"
+          ],
+          "sinic": [
+            "Da Yun 甲戌 (正印/伤官)",
+            "Zi Wei decadal 子女 戌 [庚子 hour]",
+            "Zi Wei decadal 子女 酉 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2038-01-23",
+        "end": "2039-01-23",
+        "convergences": [
+          {
+            "domain": "D5",
+            "domain_name": "Family/roots/home",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Saturn/Mercury MD/AD"
+          ],
+          "western": [
+            "profection H10 Leo (Sun in natal H4)"
+          ],
+          "sinic": [
+            "Da Yun 甲戌 (正印/伤官)",
+            "Zi Wei decadal 子女 戌 [庚子 hour]",
+            "Zi Wei decadal 子女 酉 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2039-01-23",
+        "end": "2039-09-10",
+        "convergences": [
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "western",
+              "sinic"
+            ],
+            "level": "STRONG"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Saturn/Mercury MD/AD"
+          ],
+          "western": [
+            "profection H11 Virgo (Mercury in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 甲戌 (正印/伤官)",
+            "Zi Wei decadal 子女 戌 [庚子 hour]",
+            "Zi Wei decadal 子女 酉 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2039-09-10",
+        "end": "2040-10-19",
+        "convergences": [
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Saturn/Ketu MD/AD"
+          ],
+          "western": [
+            "profection H11 Virgo (Mercury in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 甲戌 (正印/伤官)",
+            "Zi Wei decadal 子女 戌 [庚子 hour]",
+            "Zi Wei decadal 子女 酉 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2040-10-19",
+        "end": "2040-11-30",
+        "convergences": [
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "western",
+              "sinic"
+            ],
+            "level": "STRONG"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Saturn/Venus MD/AD"
+          ],
+          "western": [
+            "profection H12 Libra (Venus in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 甲戌 (正印/伤官)",
+            "Zi Wei decadal 子女 戌 [庚子 hour]",
+            "Zi Wei decadal 子女 酉 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2040-11-30",
+        "end": "2041-01-23",
+        "convergences": [
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Saturn/Venus MD/AD"
+          ],
+          "western": [
+            "profection H12 Libra (Venus in natal H3)"
+          ],
+          "sinic": [
+            "Da Yun 癸酉 (七杀/偏财)",
+            "Zi Wei decadal 子女 戌 [庚子 hour]",
+            "Zi Wei decadal 子女 酉 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2041-01-23",
+        "end": "2042-01-23",
+        "convergences": [
+          {
+            "domain": "D1",
+            "domain_name": "Self/identity",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D3",
+            "domain_name": "Wealth/gains",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Saturn/Venus MD/AD"
+          ],
+          "western": [
+            "profection H1 Scorpio (Mars in natal H2)"
+          ],
+          "sinic": [
+            "Da Yun 癸酉 (七杀/偏财)",
+            "Zi Wei decadal 子女 戌 [庚子 hour]",
+            "Zi Wei decadal 子女 酉 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2042-01-23",
+        "end": "2043-01-23",
+        "convergences": [
+          {
+            "domain": "D3",
+            "domain_name": "Wealth/gains",
+            "clusters": [
+              "western",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Saturn/Venus MD/AD"
+          ],
+          "western": [
+            "profection H2 Sagittarius (Jupiter in natal H12)"
+          ],
+          "sinic": [
+            "Da Yun 癸酉 (七杀/偏财)",
+            "Zi Wei decadal 子女 戌 [庚子 hour]",
+            "Zi Wei decadal 子女 酉 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2043-01-23",
+        "end": "2043-12-19",
+        "convergences": [
+          {
+            "domain": "D8",
+            "domain_name": "Mind/education/craft",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Saturn/Venus MD/AD"
+          ],
+          "western": [
+            "profection H3 Capricorn (Saturn in natal H9)"
+          ],
+          "sinic": [
+            "Da Yun 癸酉 (七杀/偏财)",
+            "Zi Wei decadal 子女 戌 [庚子 hour]",
+            "Zi Wei decadal 子女 酉 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2043-12-19",
+        "end": "2044-01-23",
+        "convergences": [
+          {
+            "domain": "D3",
+            "domain_name": "Wealth/gains",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Saturn/Sun MD/AD"
+          ],
+          "western": [
+            "profection H3 Capricorn (Saturn in natal H9)"
+          ],
+          "sinic": [
+            "Da Yun 癸酉 (七杀/偏财)",
+            "Zi Wei decadal 子女 戌 [庚子 hour]",
+            "Zi Wei decadal 子女 酉 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2044-01-23",
+        "end": "2044-11-30",
+        "convergences": [
+          {
+            "domain": "D3",
+            "domain_name": "Wealth/gains",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D5",
+            "domain_name": "Family/roots/home",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Saturn/Sun MD/AD"
+          ],
+          "western": [
+            "profection H4 Aquarius (Saturn in natal H9)"
+          ],
+          "sinic": [
+            "Da Yun 癸酉 (七杀/偏财)",
+            "Zi Wei decadal 子女 戌 [庚子 hour]",
+            "Zi Wei decadal 子女 酉 [辛丑 hour]"
+          ]
+        }
+      },
+      {
+        "start": "2044-11-30",
+        "end": "2045-01-23",
+        "convergences": [
+          {
+            "domain": "D2",
+            "domain_name": "Career/status",
+            "clusters": [
+              "jyotisha",
+              "sinic"
+            ],
+            "level": "MODERATE"
+          },
+          {
+            "domain": "D9",
+            "domain_name": "Fortune/spirituality/worldview",
+            "clusters": [
+              "jyotisha",
+              "western"
+            ],
+            "level": "MODERATE"
+          }
+        ],
+        "active": {
+          "jyotisha": [
+            "Saturn/Moon MD/AD"
+          ],
+          "western": [
+            "profection H4 Aquarius (Saturn in natal H9)"
+          ],
+          "sinic": [
+            "Da Yun 癸酉 (七杀/偏财)",
+            "Zi Wei decadal 子女 戌 [庚子 hour]",
+            "Zi Wei decadal 子女 酉 [辛丑 hour]"
+          ]
+        }
+      }
+    ],
+    "date_precision": {
+      "vimshottari": "+/-5 days per clock minute; Moon-based",
+      "da_yun": "convention spread ~5 days",
+      "ziwei_decadal": "Chinese New Year boundaries",
+      "profection": "birthday boundaries"
+    }
+  },
+  "claims_audit": {
+    "candidates": 38,
+    "sensitive_facts_excluded": [
+      "bazi.pillars",
+      "ziwei.soul_palace",
+      "ziwei.body_palace"
+    ],
+    "kept": 7,
+    "removed": {
+      "missing_basis": 0,
+      "low_confidence": 3,
+      "merged_into_single_domain_statement": 9,
+      "weak_or_insufficient_domain": 4,
+      "generic_barnum": 8,
+      "sinic_hour_sensitive_domain_themes": 7
+    },
+    "generic_dropped": [
+      "You are sometimes outgoing and sometimes reserved",
+      "You have untapped potential",
+      "You value honesty",
+      "You can be self-critical",
+      "Relationships are important to you",
+      "You seek security",
+      "You will face challenges and grow from them",
+      "You have a creative side"
+    ]
+  },
+  "symbolic_overlays": {
+    "maya": {
+      "calendar_round": "1 Chuwen 14 Muwan",
+      "long_count": "12.19.11.17.11",
+      "meaning": null,
+      "votes": 0
+    },
+    "tibetan": {
+      "year": "male Wood Monkey",
+      "meaning": null,
+      "votes": 0
+    }
+  }
+}

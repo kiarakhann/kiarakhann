@@ -1,0 +1,35 @@
+{
+  "original_user_entry": {
+    "date_of_birth": "23 January 2005",
+    "time_of_birth": "1 a.m.",
+    "time_certainty": "I am sure about my birth time because doctors had a stopwatch in their hand to calculate that.",
+    "birthplace": "Jalandhar which is in Punjab in India",
+    "gender": "female",
+    "current_residence": "Langley",
+    "calendar_note": "No non-Gregorian calendar or DST/time-zone uncertainty mentioned."
+  },
+  "normalized": {
+    "calendar": "gregorian",
+    "calendar_interpretation": "No other calendar mentioned; date treated as a Gregorian civil date.",
+    "local_date": "2005-01-23",
+    "local_time_24h": "01:00",
+    "time_precision": "minute",
+    "time_uncertainty_minutes": 1,
+    "time_uncertainty_rationale": "Reported as exact (timed by the delivery staff) but stated only to the minute; a +/-1 minute ensemble covers minute rounding/truncation.",
+    "place_name": "Jalandhar, Punjab, India",
+    "place_detail": "Hospital not named; city-centre coordinates used",
+    "latitude": 31.326,
+    "longitude": 75.5762,
+    "elevation_m": 228,
+    "coordinate_source": "Jalandhar city centre, standard gazetteer values (about +/-5 km for an unnamed in-city hospital)",
+    "gender": "female",
+    "current_residence": {
+      "place_name": "Langley, British Columbia, Canada",
+      "assumption": "No state or country was given; Langley, British Columbia is assumed. Langley WA or VA would change only the relocated solar-return angles.",
+      "latitude": 49.1044,
+      "longitude": -122.66,
+      "iana_zone": "America/Vancouver"
+    },
+    "iana_zone": "Asia/Kolkata"
+  }
+}

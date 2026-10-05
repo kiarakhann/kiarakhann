@@ -7,6 +7,8 @@ from zoneinfo import ZoneInfo
 import swisseph as swe
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Per-person input/output folder; defaults to the repository root.
+DATA = os.path.abspath(os.environ.get("CHART_DIR", ROOT))
 EPHE = os.path.join(ROOT, "ephe")
 swe.set_ephe_path(EPHE)
 
@@ -28,7 +30,7 @@ BRANCH_MAIN = {"子": "癸", "丑": "己", "寅": "甲", "卯": "乙", "辰": "�
 
 
 def load_input():
-    with open(os.path.join(ROOT, "BIRTH_INPUT.json")) as f:
+    with open(os.path.join(DATA, "BIRTH_INPUT.json")) as f:
         return json.load(f)
 
 
@@ -76,6 +78,6 @@ def iso(t):
 
 
 def dump(path, obj):
-    with open(os.path.join(ROOT, path), "w") as f:
+    with open(os.path.join(DATA, path), "w") as f:
         json.dump(obj, f, ensure_ascii=False, indent=2, default=str)
         f.write("\n")
